@@ -169,7 +169,31 @@ const upDateUser = async (req, res) => {
     });
 };
 // delete user
-
+const deleteUserById = (req, res) => {
+    const id = req.params.id;
+    usersModel
+      .findByIdAndDelete(id)
+      .then((result) => {
+        if (!result) {
+          return res.status(404).json({
+            success: false,
+            message: `The user with id => ${id} not found`,
+          });
+        }
+        res.status(200).json({
+          success: true,
+          message: `User deleted`,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: `Server Error`,
+          err: err.message,
+        });
+      });
+  };
+  
 // get user
 
 // send friend request
@@ -178,4 +202,5 @@ module.exports = {
   register,
   login,
   upDateUser,
+  deleteUserById
 };

@@ -1,12 +1,14 @@
 const express = require("express");
-const { register,login,upDateUser } = require("../controllers/user");
+const { register,login,upDateUser,deleteUserById } = require("../controllers/user");
 
 const usersRouter = express.Router();
 usersRouter.post("/register", register);
 
 usersRouter.post("/login", login);
 
-usersRouter.put("/profile/:id", upDateUser);
+usersRouter.put("/update/:id", upDateUser);
+usersRouter.delete("/delete/:id", deleteUserById);
+
 
 
 
