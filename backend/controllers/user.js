@@ -170,37 +170,116 @@ const upDateUser = async (req, res) => {
 };
 // delete user
 const deleteUserById = (req, res) => {
-    const id = req.params.id;
-    usersModel
-      .findByIdAndDelete(id)
-      .then((result) => {
-        if (!result) {
-          return res.status(404).json({
-            success: false,
-            message: `The user with id => ${id} not found`,
-          });
-        }
-        res.status(200).json({
-          success: true,
-          message: `User deleted`,
-        });
-      })
-      .catch((err) => {
-        res.status(500).json({
+  const id = req.params.id;
+  usersModel
+    .findByIdAndDelete(id)
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
           success: false,
-          message: `Server Error`,
-          err: err.message,
+          message: `The user with id => ${id} not found`,
         });
+      }
+      res.status(200).json({
+        success: true,
+        message: `User deleted`,
       });
-  };
-  
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
+
 // get user
+const getUserById = (req, res) => {
+  let id = req.params.id;
+  usersModel
+    .findById(id)
+    .populate("username")
+    .exec()
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `The user with id => ${id} not found`,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: `The user ${id} `,
+        result: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
 
 // send friend request
+
+const sendFriendRequest = async (req, res) => {
+  try {
+    const { friendId } = req.params;
+    const { userId } = req.token;
+    // console.log(req.token);
+    // console.log(req.params);
+    // const sender = await usersModel
+    //   .findOneAndUpdate(
+    //     { _id: userId },
+    //     { $push: { friendsRequestSent: { name: friendId } } }
+    //   )
+
+    // const receiver = await usersModel
+    //   .findOneAndUpdate(
+    //     { _id: friendId },
+    //     { $push: { friendsRequestReceived: { name: userId } } }
+    //   )
+    //   ;
+    const sender = await usersModel.findById(userId);
+    const receiver = await usersModel.findById(friendId);
+    console.log("sender: ",sender._id,"rece: ",receiver?._id);
+    if (!sender || !receiver) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User Not Found" });
+    }
+    // if (
+    //   receiver.friends.includes(userId) ||
+    //   sender.friends.includes(friendId)
+    // ) {
+    //   throw new Error("Can't send request Your'e Friends");
+    // }
+
+    sender.friendsRequestSent.push({ name: friendId }),
+      receiver.friendsRequestReceived.push({ name: userId }),
+      await sender.save();
+    await receiver.save();
+
+    // !-------------------------------------------
+    res
+      .status(200)
+      .json({ success: true, message: "Friend request sent successfully." });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ message: "Failed to send friend request.", error: error });
+  }
+};
 
 module.exports = {
   register,
   login,
   upDateUser,
-  deleteUserById
+  deleteUserById,
+  getUserById,
+  sendFriendRequest,
 };
