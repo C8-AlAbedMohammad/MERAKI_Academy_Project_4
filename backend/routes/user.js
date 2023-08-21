@@ -16,7 +16,7 @@ usersRouter.delete("/delete/:id", deleteUserById);
 usersRouter.get("/:id", getUserById);
 
 // send friend request
-usersRouter.post("/sendrequest/:id",authentication, sendFriendRequest);
+usersRouter.post("/sendrequest/:receiverId",authentication, sendFriendRequest);
 
 
 

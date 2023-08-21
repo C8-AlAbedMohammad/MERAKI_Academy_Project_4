@@ -227,39 +227,36 @@ const getUserById = (req, res) => {
 
 const sendFriendRequest = async (req, res) => {
   try {
-    const { friendId } = req.params;
-    const { userId } = req.token;
-    // console.log(req.token);
-    // console.log(req.params);
-    // const sender = await usersModel
-    //   .findOneAndUpdate(
-    //     { _id: userId },
-    //     { $push: { friendsRequestSent: { name: friendId } } }
-    //   )
+    const { receiverId } = req.params;
+    const senderId  = req.token.userId;
+    console.log(req.token);
 
-    // const receiver = await usersModel
-    //   .findOneAndUpdate(
-    //     { _id: friendId },
-    //     { $push: { friendsRequestReceived: { name: userId } } }
-    //   )
-    //   ;
-    const sender = await usersModel.findById(userId);
-    const receiver = await usersModel.findById(friendId);
-    console.log("sender: ",sender._id,"rece: ",receiver?._id);
+    const sender = await usersModel.findById(senderId);
+    const receiver = await usersModel.findById(receiverId);
+    console.log("sender: ",sender?._id,"rece: ",receiver?._id);
     if (!sender || !receiver) {
       return res
         .status(404)
         .json({ success: false, message: "User Not Found" });
     }
+    // !---Why don't work this
     // if (
-    //   receiver.friends.includes(userId) ||
-    //   sender.friends.includes(friendId)
+    //     sender.friendsRequestSent.includes(receiverId) ||
+    //     receiver.friendsRequestReceived.includes(senderId)
     // ) {
-    //   throw new Error("Can't send request Your'e Friends");
+    //     return res.status(400).json({ success: false, message: "Can't send request. You're already friends." });
     // }
+    if (
+        receiver.friends.includes(senderId) ||
+        sender.friendsRequestSent.includes(req => req.name.equals(receiverId)) ||
+        receiver.friendsRequestReceived.some(req => req.name.equals(senderId))
+     
+    ) {
+        return res.status(400).json({ success: false, message: "Can't send request. You're already friends." });
+    }
 
-    sender.friendsRequestSent.push({ name: friendId }),
-      receiver.friendsRequestReceived.push({ name: userId }),
+    sender.friendsRequestSent.push({ name: receiverId }),
+      receiver.friendsRequestReceived.push({ name: senderId }),
       await sender.save();
     await receiver.save();
 
