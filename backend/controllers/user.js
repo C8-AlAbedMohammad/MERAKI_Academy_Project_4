@@ -2,7 +2,7 @@ const usersModel = require("../models/UserSchema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// This function creates a new author (new user)
+// This function creates a  (new user)
 const register = (req, res) => {
   const {
     firstName,
@@ -13,6 +13,7 @@ const register = (req, res) => {
     country,
     email,
     password,
+    friendsRequestReceived,
   } = req.body;
   const user = new usersModel({
     firstName,
@@ -26,8 +27,9 @@ const register = (req, res) => {
     role: "64e271bbc93475c36974e07b",
     profilePicture: "",
     coverPicture: "",
-    followers: [],
-    followings: [],
+    friends: [],
+    friendsRequestReceived,
+    friendsRequestSent: [],
   });
 
   user
@@ -38,7 +40,6 @@ const register = (req, res) => {
         message: `Account Created Successfully`,
         author: result,
       });
-      
     })
     .catch((err) => {
       if (err?.keyPattern?.email) {
@@ -60,7 +61,7 @@ const register = (req, res) => {
       });
     });
 };
-
+// Login
 const login = (req, res) => {
   const { email, username, password } = req.body;
 
@@ -111,7 +112,70 @@ const login = (req, res) => {
     });
 };
 
+// update user
+const upDateUser = async (req, res) => {
+  const { id } = req.params;
+  let {
+    firstName,
+    lastName,
+    username,
+    dateOfBirth,
+    gender,
+    country,
+    email,
+    password,
+    profilePicture,
+    covePicture,
+  } = req.body;
+  email = email?.toLowerCase();
+  username = username?.toLowerCase();
+  password = await bcrypt.hash(password, 10);
+  usersModel
+    .findByIdAndUpdate(
+      { _id: id },
+      {
+        firstName,
+        lastName,
+        username,
+        dateOfBirth,
+        gender,
+        country,
+        email,
+        password,
+        profilePicture,
+        covePicture,
+      },
+      { new: true }
+    )
+    .then((update) => {
+      if (!update) {
+        return res.status(404).json({
+          success: false,
+          message: `The user with id => ${id} not found`,
+        });
+      }
+      res.status(202).json({
+        success: true,
+        message: `User updated`,
+        updated: update,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
+// delete user
+
+// get user
+
+// send friend request
+
 module.exports = {
   register,
   login,
+  upDateUser,
 };
