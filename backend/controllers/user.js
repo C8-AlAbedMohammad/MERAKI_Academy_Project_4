@@ -240,19 +240,14 @@ const sendFriendRequest = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User Not Found" });
     }
-    // !---Why don't work this
-    // if (
-    //     sender.friendsRequestSent.includes(receiverId) ||
-    //     receiver.friendsRequestReceived.includes(senderId)
-    // ) {
-    //     return res.status(400).json({ success: false, message: "Can't send request. You're already friends." });
-    // }
-    if (
-        sender.friendsRequestSent.some(req => req.name.equals(receiverId)) ||
-        receiver.friendsRequestReceived.some(req => req.name.equals(senderId))
-    ) {
-        return res.status(400).json({ success: false, message: "Can't send request. You're already friends." });
-    }
+    const sentRequestIndex =  sender.friendsRequestSent.findIndex(req => req.name.equals(receiverId))
+    const receivedRequestIndex = receiver.friendsRequestReceived.findIndex(req => req.name.equals(senderId))
+      if (
+          !sentRequestIndex ||
+          !receivedRequestIndex)
+      {
+          return res.status(400).json({ success: false, message: "Friend request not found " });
+      }
     await Promise.all([ usersModel.updateOne({_id:senderId},{$push:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$push:{friendsRequestReceived:{name:senderId}}})])
 
  
@@ -296,12 +291,12 @@ const cancelFriendRequest  = async (req, res) => {
     // !-------------------------------------------
     res
       .status(200)
-      .json({ success: true, message: "Friend request sent successfully." });
+      .json({ success: true, message: "Friend request canceled." });
   } catch (error) {
     console.log(error);
     res
       .status(400)
-      .json({ message: "Failed to send friend request.", error: error });
+      .json({ message: "Failed to cancel friend request.", error: error });
   }
 }
 
@@ -310,27 +305,27 @@ const acceptFriendRequest= async (req, res) => {
 try {
     const receiverId = req.token.userId; 
     const {senderId} = req.params;
-    const receiver = await User.findById(receiverId);
-    const sender = await User.findById(senderId);
+    const receiver = await usersModel.findById(receiverId);
+    const sender = await usersModel.findById(senderId);
 
-    const requestIndex = receiver.friendRequestsReceived.findIndex(req => req.name.equals(senderId));
+    const requestIndex = receiver.friends.findIndex(req => req.equals(senderId));
 
-    if (requestIndex === -1) {
+    if (!requestIndex ) {
         return res.status(400).json({ success: false, message: " Friend request not found" });
     }
 
-    receiver.friends.push(senderId);
-    sender.friends.push(receiverId);
 
-    receiver.friendsRequestsReceived.splice(requestIndex, 1);
+    await Promise.all([ usersModel.updateOne({_id:senderId},{$push:{friends:receiverId}}),  usersModel.updateOne({_id:receiverId},{$push:{friends:senderId}}),usersModel.updateOne({_id:senderId},{$pull:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$pull:{friendsRequestReceived:{name:senderId}}})])
 
-    await receiver.save();
-    await sender.save();
-
-
+    res
+    .status(200)
+    .json({ success: true, message: "Friend request accepted ." });
   
 } catch (error) {
-    
+    console.log(error);
+    res
+      .status(400)
+      .json({ message: "Failed to accept friend request.", error: error });
 }
 }
 
@@ -341,7 +336,6 @@ module.exports = {
   deleteUserById,
   getUserById,
   sendFriendRequest,
-  acceptFriendRequest,
   cancelFriendRequest,
-  
+  acceptFriendRequest,
 };
