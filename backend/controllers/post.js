@@ -95,11 +95,7 @@ const likePost = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Post Not Found " });
     }
-    // const requestIndex = post.likes.findIndex(req => req.equals(userId));
 
-    // if (!requestIndex ) {
-    //     return res.status(400).json({ success: false, message: " already Liked" });
-    // }
     if (!post.likes.includes(userId)) {
       await postModel
         .updateOne({ _id: postId }, { $push: { likes: userId } })
@@ -117,10 +113,7 @@ const likePost = async (req, res) => {
         });
       res.status(200).json({ success: true, message: "post disLiked ." });
     }
-    // await Promise.all([ postModel.updateOne({_id:postId},{$push:{likes:userId}})])
-    // res
-    // .status(200)
-    // .json({ success: true, message: "post Liked ." });
+
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Failed to Like a post.", error: error });

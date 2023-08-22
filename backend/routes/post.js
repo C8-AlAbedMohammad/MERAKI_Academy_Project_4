@@ -32,20 +32,32 @@ postRouter.post("/like/:postId", authentication,likePost);
 postRouter.get("/:id",getPostsById)
 // !timeline
 postRouter.get("/", authentication,getUserPostAndFriendPost);
+// ! add comment 
 postRouter.post(
     "/comment/:postId",
     authentication,
     authorization("all"),
     createComment
   );
+  // ! update comment 
+
   postRouter.put(
     "/updateComment/:commentId",
     authentication,
     updateComment 
   );
+  // ! delete comment 
+
   postRouter.delete(
     "/deleteComment/:commentId",
     authentication,
     deleteComment 
   );
+  // ! add reply to comment 
+  postRouter.post(
+    "/addreply/:commentId",
+    authentication,
+    addReplyToComment
+  );
+
 module.exports = postRouter;
