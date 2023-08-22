@@ -1,6 +1,6 @@
 const postModel = require("../models/post");
 
-// create post
+//!--- create post
 const createNewPost = (req, res) => {
   const { description, image } = req.body;
   const username = req.token.userId;
@@ -27,7 +27,7 @@ const createNewPost = (req, res) => {
       });
     });
 };
-// update post
+//!--- update post
 const updatePostById = (req, res) => {
   const id = req.params.id;
   const filter = req.body;
@@ -57,7 +57,7 @@ const updatePostById = (req, res) => {
       });
     });
 };
-// delete post
+//!----- delete post
 const deletePostById = (req, res) => {
   const { id } = req.params;
   postModel
@@ -83,7 +83,7 @@ const deletePostById = (req, res) => {
     });
 };
 
-// like post
+// !---like post
 const likePost = async (req, res) => {
   try {
     const { postId } = req.params;
@@ -95,51 +95,109 @@ const likePost = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Post Not Found " });
     }
-    const requestIndex = post.likes.findIndex(req => req.equals(userId));
+    // const requestIndex = post.likes.findIndex(req => req.equals(userId));
 
-    if (!requestIndex ) {
-        return res.status(400).json({ success: false, message: " already Liked" });
+    // if (!requestIndex ) {
+    //     return res.status(400).json({ success: false, message: " already Liked" });
+    // }
+    if (!post.likes.includes(userId)) {
+      await postModel
+        .updateOne({ _id: postId }, { $push: { likes: userId } })
+        .populate({
+          path: "username",
+          select: "firstName lastName -_id",
+        });
+      res.status(200).json({ success: true, message: "post Liked ." });
+    } else {
+      await postModel
+        .updateOne({ _id: postId }, { $pull: { likes: userId } })
+        .populate({
+          path: "username",
+          select: "firstName lastName -_id",
+        });
+      res.status(200).json({ success: true, message: "post disLiked ." });
     }
-    await Promise.all([ postModel.updateOne({_id:postId},{$push:{likes:userId}})])
-    res
-    .status(200)
-    .json({ success: true, message: "post Liked ." });
+    // await Promise.all([ postModel.updateOne({_id:postId},{$push:{likes:userId}})])
+    // res
+    // .status(200)
+    // .json({ success: true, message: "post Liked ." });
   } catch (error) {
     console.log(error);
-    res
-      .status(400)
-      .json({ message: "Failed to Like a post.", error: error });
+    res.status(400).json({ message: "Failed to Like a post.", error: error });
   }
 };
 // dislike post
-const disLikePost = async (req, res) => {
-    try {
-      const { postId } = req.params;
-      const userId = req.token.userId;
-  
-      const post = await postModel.findById(postId);
+// const disLikePost = async (req, res) => {
+//     try {
+//       const { postId } = req.params;
+//       const userId = req.token.userId;
+
+//       const post = await postModel.findById(postId);
+//       if (!post) {
+//         return res
+//           .status(404)
+//           .json({ success: false, message: "Post Not Found " });
+//       }
+//       const requestIndex = post.likes.findIndex(req => req.equals(userId));
+
+//       if (requestIndex ) {
+//           return res.status(400).json({ success: false, message: " already Liked" });
+//       }
+//       await Promise.all([ postModel.updateOne({_id:postId},{$pull:{likes:userId}})])
+//       res
+//       .status(200)
+//       .json({ success: true, message: "post disLiked ." });
+//     } catch (error) {
+//       console.log(error);
+//       res
+//         .status(400)
+//         .json({ message: "Failed to Like a post.", error: error });
+//     }
+//   };
+//!--- get post
+const getPostsById = (req, res) => {
+  let id = req.params.id;
+  postModel
+    .findById(id)
+    .populate({
+      path: "username",
+      select: "firstName lastName -_id",
+    })
+    .exec()
+    .then((post) => {
       if (!post) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Post Not Found " });
+        return res.status(404).json({
+          success: false,
+          message: `The post with id => ${id} not found`,
+        });
       }
-      const requestIndex = post.likes.findIndex(req => req.equals(userId));
-  
-      if (requestIndex ) {
-          return res.status(400).json({ success: false, message: " already Liked" });
-      }
-      await Promise.all([ postModel.updateOne({_id:postId},{$pull:{likes:userId}})])
-      res
-      .status(200)
-      .json({ success: true, message: "post disLiked ." });
-    } catch (error) {
-      console.log(error);
-      res
-        .status(400)
-        .json({ message: "Failed to Like a post.", error: error });
-    }
-  };
-// get post
+      res.status(200).json({
+        success: true,
+        message: `The post ${id} `,
+        post: post,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
+// ! get all post user+friend post
+try {
+    
 
+    
+} catch (error) {
+    
+}
 
-module.exports = { createNewPost, updatePostById, deletePostById,likePost ,disLikePost};
+module.exports = {
+  createNewPost,
+  updatePostById,
+  deletePostById,
+  likePost,
+  getPostsById,
+};
