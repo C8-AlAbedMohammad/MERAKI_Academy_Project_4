@@ -91,7 +91,7 @@ const login = (req, res) => {
         };
         console.log(payload);
         const options = {
-          expiresIn: "60m",
+          expiresIn: "3d",
         };
         const token = jwt.sign(payload, process.env.SECRET, options);
         res.status(200).json({
@@ -310,13 +310,16 @@ try {
 
     const requestIndex = receiver.friends.findIndex(req => req.equals(senderId));
 
-    if (!requestIndex ) {
+    if (requestIndex===-1 ) {
         return res.status(400).json({ success: false, message: " Friend request not found" });
     }
 
-
+    if (!receiver.friends.includes(senderId) && !sender.friends.includes(receiverId)) {
     await Promise.all([ usersModel.updateOne({_id:senderId},{$push:{friends:receiverId}}),  usersModel.updateOne({_id:receiverId},{$push:{friends:senderId}}),usersModel.updateOne({_id:senderId},{$pull:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$pull:{friendsRequestReceived:{name:senderId}}})])
-
+    }else{
+        return res.status(400).json({ success: false, message: " you are Friends " });
+ 
+    }
     res
     .status(200)
     .json({ success: true, message: "Friend request accepted ." });

@@ -1,5 +1,5 @@
 const postModel = require("../models/post");
-
+const userModel = require("../models/UserSchema");
 //!--- create post
 const createNewPost = (req, res) => {
   const { description, image } = req.body;
@@ -186,18 +186,50 @@ const getPostsById = (req, res) => {
     });
 };
 // ! get all post user+friend post
-try {
-    
+const getUserPostAndFriendPost = async (req, res) => {
+  try {
+    const userId = req.token.userId;
+    console.log(userId);
+    const userPosts = await postModel.find({ username: userId });
+    const user = await userModel.findById(userId).populate("friends");
+    const friends = user.friends;
+    console.log(friends);
+    const friendPosts = await Promise.all(
+      friends.map(async (friend) => {
+        return await postModel.find({ username: friend._id });
+      })
+    );
 
-    
-} catch (error) {
-    
-}
-
+    const allPosts = [...userPosts, ...friendPosts.flat()];
+    allPosts.sort((a, b) => b.date - a.date);
+    res.status(200).json({
+      success: true,
+      message: "User and friends' posts ",
+      posts: allPosts,
+    });
+    // const currentUser=await userModel.findById(userId);
+    // const userPosts=await postModel.find({username:currentUser._id})
+    // const friendPosts= await Promise.all(currentUser.friends.map(friendId=>{
+    //     postModel.find({username:friendId})
+    // }))
+    // const allPosts = [...userPosts, ...friendPosts.flat()];
+    // allPosts.sort((a, b) => b.date - a.date);
+    // res.status(200).json({
+    //       success: true,
+    //       message: "User and friends' posts ",
+    //       posts: allPosts,
+    //     });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
+  }
+};
 module.exports = {
   createNewPost,
   updatePostById,
   deletePostById,
   likePost,
-  getPostsById,
+  getPostsById,getUserPostAndFriendPost
 };
