@@ -10,10 +10,12 @@ app.use(express.json());
 // Import Routers
 const usersRouter = require("./routes/user");
 const rolesRouter = require("./routes/role");
+const postRouter = require("./routes/post");
 
 app.use("/users", usersRouter);
 app.use("/roles", rolesRouter);
 
+app.use("/post", postRouter);
 
 // Handles any other endpoints [unassigned - endpoints]
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
