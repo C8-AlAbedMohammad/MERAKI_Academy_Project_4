@@ -38,6 +38,14 @@ postRouter.post(
     authorization("all"),
     createComment
   );
-
-
+  postRouter.put(
+    "/updateComment/:commentId",
+    authentication,
+    updateComment 
+  );
+  postRouter.delete(
+    "/deleteComment/:commentId",
+    authentication,
+    deleteComment 
+  );
 module.exports = postRouter;

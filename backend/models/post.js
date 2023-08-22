@@ -8,6 +8,6 @@ const post = new mongoose.Schema({
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   dateOfPublish:{type:Date,default:Date.now()},
   likes:[{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
-});
+},{ timestamps: true });
 
 module.exports = mongoose.model("Posts", post);

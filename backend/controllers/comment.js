@@ -14,9 +14,11 @@ const createComment = async (req, res) => {
     });
 
     const savedComment = await newComment.save();
-    await postModel.findByIdAndUpdate(postId, {
-      $push: { comments: savedComment._id },
-    }).populate("comments");
+    await postModel
+      .findByIdAndUpdate(postId, {
+        $push: { comments: savedComment._id },
+      })
+      .populate("comments");
     res.status(201).json({
       success: true,
       message: "Comment created successfully.",
@@ -31,18 +33,78 @@ const createComment = async (req, res) => {
 };
 //!--- Update a Comment
 const updateComment = async (req, res) => {
-    
-}
+  try {
+    const { commentId } = req.params;
+    const { comment } = req.body;
+    const userId = req.token.userId;
+    const existingComment = await commentModel.findOne({
+      _id: commentId,
+      commenter: userId,
+    });
+    if (!existingComment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "You Can't Edit Others Comments " });
+    }
+    const updatedComment = await commentModel.findByIdAndUpdate(
+      commentId,
+      { comment },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Comment updated.",
+      comment: updatedComment,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
+  }
+};
 
 //!--- delete a Comment
-const deleteComment = async (req, res) => {}
+const deleteComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const userId = req.token.userId;
+
+    const existingComment = await commentModel.findOne({
+        _id: commentId,
+        commenter: userId,
+      });
+
+      if (!existingComment) {
+        return res.status(404).json({ success: false, message: "You Can't delete Others Comments " });
+      }
+      const deletedComment = await commentModel.findByIdAndDelete(commentId);
+
+      if (!deletedComment) {
+        return res.status(404).json({ success: false, message: "Comment not found" });
+      }
+
+      await postModel.findByIdAndUpdate(deletedComment.postId, {
+      $pull: { comments: commentId },
+    });
+
+    res.status(200).json({ success: true, message: "Comment deleted ." });
+
+      
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
+
+  }
+};
 
 //!--- add reply a Comment
-const addReplyToComment = async (req, res) => {}
+const addReplyToComment = async (req, res) => {};
 
 module.exports = {
   createComment,
   updateComment,
-//   deleteComment,
-//   addReplyToComment,
+    deleteComment,
+  //   addReplyToComment,
 };
