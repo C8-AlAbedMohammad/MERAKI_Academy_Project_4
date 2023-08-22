@@ -18,6 +18,7 @@ usersRouter.get("/:id", getUserById);
 // send friend request
 usersRouter.post("/sendrequest/:receiverId",authentication, sendFriendRequest);
 
+usersRouter.post("/accept-request/:senderId",authentication, sendFriendRequest);
 
 
 module.exports = usersRouter;

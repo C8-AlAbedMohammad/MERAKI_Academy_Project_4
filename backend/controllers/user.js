@@ -81,7 +81,7 @@ const login = (req, res) => {
         if (!valid) {
           return res.status(403).json({
             success: false,
-            message: `The email doesn't exist or The password you’ve entered is incorrect`,
+            message: ` The password you’ve entered is incorrect`,
           });
         }
         const payload = {
@@ -226,6 +226,7 @@ const getUserById = (req, res) => {
 // send friend request
 
 const sendFriendRequest = async (req, res) => {
+    console.log(req.token);
   try {
     const { receiverId } = req.params;
     const senderId  = req.token.userId;
@@ -247,19 +248,14 @@ const sendFriendRequest = async (req, res) => {
     //     return res.status(400).json({ success: false, message: "Can't send request. You're already friends." });
     // }
     if (
-        receiver.friends.includes(senderId) ||
-        sender.friendsRequestSent.includes(req => req.name.equals(receiverId)) ||
+        sender.friendsRequestSent.some(req => req.name.equals(receiverId)) ||
         receiver.friendsRequestReceived.some(req => req.name.equals(senderId))
-     
     ) {
         return res.status(400).json({ success: false, message: "Can't send request. You're already friends." });
     }
+    await Promise.all([ usersModel.updateOne({_id:senderId},{$push:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$push:{friendsRequestReceived:{name:senderId}}})])
 
-    sender.friendsRequestSent.push({ name: receiverId }),
-      receiver.friendsRequestReceived.push({ name: senderId }),
-      await sender.save();
-    await receiver.save();
-
+ 
     // !-------------------------------------------
     res
       .status(200)
@@ -272,6 +268,35 @@ const sendFriendRequest = async (req, res) => {
   }
 };
 
+// !---- Accept Friend Request ----
+const acceptFriendRequest= async (req, res) => {
+try {
+    const receiverId = req.token.userId; 
+    const {senderId} = req.params;
+    const receiver = await User.findById(receiverId);
+    const sender = await User.findById(senderId);
+
+    const requestIndex = receiver.friendRequestsReceived.findIndex(req => req.name.equals(senderId));
+
+    if (requestIndex === -1) {
+        return res.status(400).json({ success: false, message: " Friend request not found" });
+    }
+
+    receiver.friends.push(senderId);
+    sender.friends.push(receiverId);
+
+    receiver.friendsRequestsReceived.splice(requestIndex, 1);
+
+    await receiver.save();
+    await sender.save();
+
+
+  
+} catch (error) {
+    
+}
+}
+
 module.exports = {
   register,
   login,
@@ -279,4 +304,5 @@ module.exports = {
   deleteUserById,
   getUserById,
   sendFriendRequest,
+  acceptFriendRequest
 };
