@@ -267,6 +267,43 @@ const sendFriendRequest = async (req, res) => {
       .json({ message: "Failed to send friend request.", error: error });
   }
 };
+// !---- cancel Friend Request ----
+const cancelFriendRequest  = async (req, res) => {
+  try {
+    const { receiverId } = req.params;
+    const senderId  = req.token.userId;
+    console.log(req.token);
+
+    const sender = await usersModel.findById(senderId);
+    const receiver = await usersModel.findById(receiverId);
+    console.log("sender: ",sender?._id,"rece: ",receiver?._id);
+    if (!sender || !receiver) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User Not Found" });
+    }
+  const sentRequestIndex =  sender.friendsRequestSent.findIndex(req => req.name.equals(receiverId))
+  const receivedRequestIndex = receiver.friendsRequestReceived.findIndex(req => req.name.equals(senderId))
+    if (
+        sentRequestIndex===-1 ||
+        receivedRequestIndex===-1)
+    {
+        return res.status(400).json({ success: false, message: "Friend request not found " });
+    }
+    await Promise.all([ usersModel.updateOne({_id:senderId},{$pull:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$pull:{friendsRequestReceived:{name:senderId}}})])
+
+ 
+    // !-------------------------------------------
+    res
+      .status(200)
+      .json({ success: true, message: "Friend request sent successfully." });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ message: "Failed to send friend request.", error: error });
+  }
+}
 
 // !---- Accept Friend Request ----
 const acceptFriendRequest= async (req, res) => {
@@ -304,5 +341,7 @@ module.exports = {
   deleteUserById,
   getUserById,
   sendFriendRequest,
-  acceptFriendRequest
+  acceptFriendRequest,
+  cancelFriendRequest,
+  
 };
