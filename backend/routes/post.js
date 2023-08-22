@@ -1,6 +1,10 @@
 const express = require("express");
 
 const { createNewPost,updatePostById,deletePostById,likePost,disLikePost,getPostsById ,getUserPostAndFriendPost} = require("./../controllers/post");
+const { createComment,
+    updateComment,
+    deleteComment,
+    addReplyToComment,}=require("./../controllers/comment");
 // Middleware
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -27,5 +31,13 @@ postRouter.post("/like/:postId", authentication,likePost);
 // !get post by id
 postRouter.get("/:id",getPostsById)
 // !timeline
-postRouter.get("/", authentication,getUserPostAndFriendPost)
+postRouter.get("/", authentication,getUserPostAndFriendPost);
+postRouter.post(
+    "/comment/:postId",
+    authentication,
+    authorization("all"),
+    createComment
+  );
+
+
 module.exports = postRouter;
