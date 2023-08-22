@@ -111,7 +111,35 @@ const likePost = async (req, res) => {
       .json({ message: "Failed to Like a post.", error: error });
   }
 };
-
+// dislike post
+const disLikePost = async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const userId = req.token.userId;
+  
+      const post = await postModel.findById(postId);
+      if (!post) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Post Not Found " });
+      }
+      const requestIndex = post.likes.findIndex(req => req.equals(userId));
+  
+      if (requestIndex ) {
+          return res.status(400).json({ success: false, message: " already Liked" });
+      }
+      await Promise.all([ postModel.updateOne({_id:postId},{$pull:{likes:userId}})])
+      res
+      .status(200)
+      .json({ success: true, message: "post disLiked ." });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(400)
+        .json({ message: "Failed to Like a post.", error: error });
+    }
+  };
 // get post
 
-module.exports = { createNewPost, updatePostById, deletePostById,likePost };
+
+module.exports = { createNewPost, updatePostById, deletePostById,likePost ,disLikePost};

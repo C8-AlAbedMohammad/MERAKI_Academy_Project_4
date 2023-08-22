@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { createNewPost,updatePostById,deletePostById,likePost } = require("./../controllers/post");
+const { createNewPost,updatePostById,deletePostById,likePost,disLikePost } = require("./../controllers/post");
 // Middleware
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -22,7 +22,8 @@ postRouter.delete("/:id", authentication,deletePostById);
 
 // like a Post
 postRouter.post("/like/:postId", authentication,likePost);
-
+// dislike a Post
+postRouter.post("/dislike/:postId", authentication,disLikePost);
 
 
 module.exports = postRouter;
