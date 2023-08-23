@@ -1,10 +1,10 @@
 const express = require("express");
 
-const { createNewPost,updatePostById,deletePostById,likePost,disLikePost,getPostsById ,getUserPostAndFriendPost} = require("./../controllers/post");
+const { createNewPost,updatePostById,deletePostById,likePost,disLikePost,getPostsById ,getUserPostAndFriendPost,} = require("./../controllers/post");
 const { createComment,
     updateComment,
     deleteComment,
-    addReplyToComment,}=require("./../controllers/comment");
+    addReplyToComment,likeComment}=require("./../controllers/comment");
 // Middleware
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -59,5 +59,6 @@ postRouter.post(
     authentication,
     addReplyToComment
   );
+  postRouter.post("/likeComment/:commentId", authentication,likeComment);
 
 module.exports = postRouter;

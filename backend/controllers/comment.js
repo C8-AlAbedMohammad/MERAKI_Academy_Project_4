@@ -138,11 +138,48 @@ const addReplyToComment = async (req, res) => {
       .json({ success: false, message: "Server Error", error: error.message });
   }
 };
-
+// !---like a comment
+const likeComment = async (req, res) => {
+    try {
+      const { commentId } = req.params;
+      const userId = req.token.userId;
+  
+      const comment = await commentModel.findById(commentId);
+      console.log(commentId);
+      if (!comment) {
+        return res
+          .status(404)
+          .json({ success: false, message: "comment Not Found " });
+      }
+  
+      if (!comment.likes.includes(userId)) {
+        await commentModel
+          .updateOne({ _id: commentId }, { $push: { likes: userId } })
+          .populate({
+            path: "username",
+            select: "firstName lastName -_id",
+          });
+        res.status(200).json({ success: true, message: "comment Liked ." });
+      } else {
+        await commentModel
+          .updateOne({ _id: commentId }, { $pull: { likes: userId } })
+          .populate({
+            path: "username",
+            select: "firstName lastName -_id",
+          });
+        res.status(200).json({ success: true, message: "comment disLiked ." });
+      }
+  
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ message: "Failed to Like comment.", error: error });
+    }
+  };
 
 module.exports = {
   createComment,
   updateComment,
   deleteComment,
   addReplyToComment,
+  likeComment
 };
