@@ -11,6 +11,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [login, setLogin] = useState({});
+  const [currentUser, setCurrntUser] = useState({});
+
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = (e) => {

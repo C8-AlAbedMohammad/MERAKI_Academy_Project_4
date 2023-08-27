@@ -98,6 +98,7 @@ const login = (req, res) => {
           success: true,
           message: `Valid login credentials`,
           token: token,
+          userId: result._id,
         });
       } catch (error) {
         throw new Error(error);
@@ -264,9 +265,20 @@ const sendFriendRequest = async (req, res) => {
 };
 
 const getFrindRequest=(req,res)=>{
+  const userId=req.token.userId;
   usersModel
-  .find({friendsRequestReceived})
-  .populate("friendsRequestReceived")
+  .find({_id:userId},"friendsRequestReceived")
+  .populate("friendsRequestReceived").populate(
+    {
+      path:"friendsRequestReceived",
+      populate:{
+        path:"name",
+        select: "firstName lastName profilePicture",
+
+      }
+
+    }
+  )
   .exec()
   .then((result) => {
     if (!result) {
@@ -329,15 +341,17 @@ const cancelFriendRequest  = async (req, res) => {
 
 // !---- Accept Friend Request ----
 const acceptFriendRequest= async (req, res) => {
+ 
 try {
     const receiverId = req.token.userId; 
     const {senderId} = req.params;
+     console.log("receiverId",receiverId,"{senderId}",senderId);
     const receiver = await usersModel.findById(receiverId);
     const sender = await usersModel.findById(senderId);
 
     const requestIndex = receiver.friends.findIndex(req => req.equals(senderId));
-
-    if (requestIndex===-1 ) {
+console.log(requestIndex);
+    if (!requestIndex===-1 ) {
         return res.status(400).json({ success: false, message: " Friend request not found" });
     }
 

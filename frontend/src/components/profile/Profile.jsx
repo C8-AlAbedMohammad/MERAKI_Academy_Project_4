@@ -12,17 +12,20 @@ import Feeds from "../Feeds/Feeds";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../../App";
+import NavBar from "../NavBar/NavBar";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const { token } = useContext(LoginContext);
     const { currntUser, setCurrntUser } = useState({});
-
+const {id}=useParams()
+console.log(id);
   useEffect(() => {
     handleGetCurrntUser();
-  }, {});
+  }, {currntUser});
   const handleGetCurrntUser = () => {
     axios
-      .get(`http://localhost:5000/users/64ea888aa75008e8deb6ed83`, currntUser, {
+      .get(`http://localhost:5000/users/${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -37,6 +40,7 @@ const Profile = () => {
 
   return (
     <div className="profile">
+      <NavBar/>
       <div className="images">
         <img
           src="https://images.pexels.com/photos/13440765/pexels-photo-13440765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
@@ -77,7 +81,7 @@ const Profile = () => {
               </div>
               <div className="item">
                 <LanguageIcon />
-                <span>lama.dev</span>
+                <span>username</span>
               </div>
             </div>
             <button>follow</button>
