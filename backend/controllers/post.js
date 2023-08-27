@@ -13,7 +13,11 @@ const createNewPost = (req, res) => {
 
   newPost
     .save()
-    .then((post) => {
+    .then(async( post) => {
+   await   post.populate({
+        path: "username",
+        select: "firstName lastName profilePicture ",
+      })
       res.status(201).json({
         success: true,
         message: `post created`,
@@ -157,7 +161,7 @@ const getPostsById = (req, res) => {
     .findById(id)
     .populate({
       path: "username",
-      select: "firstName lastName -_id",
+      select: "firstName lastName profilePicture -_id",
     })
     .exec()
     .then((post) => {

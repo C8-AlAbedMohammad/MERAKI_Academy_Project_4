@@ -21,8 +21,8 @@ const Feeds = () => {
   useEffect(() => {
     handleGetPost();
   }, []);
-  const { token } = useContext(LoginContext);
-  const [getPost, setGetPost] = useState([]);
+  const { token,getPost, setGetPost } = useContext(LoginContext);
+ 
   const [getPostId, setGetPostId] = useState("");
 
   const [userId, setuserId] = useState("");
@@ -35,9 +35,9 @@ const Feeds = () => {
       })
       .then((res) => {
         console.log(res.data);
-        // res.data.articles.map((e,i)=>{})
         setGetPost(res.data.posts);
         setuserId(res.data.userId);
+     
       })
       .catch((err) => {
         console.log(err);

@@ -9,7 +9,7 @@ import Profile from './components/profile/Profile';
 export const LoginContext = createContext();
 function App() {
   const navigate = useNavigate();
-
+  const [getPost, setGetPost] = useState([]);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // if (!isLoggedIn) {
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <LoginContext.Provider
-      value={{ token, setToken, isLoggedIn, setIsLoggedIn }}
+      value={{ token, setToken, isLoggedIn, setIsLoggedIn,getPost, setGetPost }}
     >
       <div className="theme-light">
         <Routes>

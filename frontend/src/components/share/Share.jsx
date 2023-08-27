@@ -8,10 +8,10 @@ import axios from "axios";
 
 
 const Share = () => {
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState([]);
   const [message, setMessage] = useState("");
 
-  const {token} = useContext(LoginContext)
+  const { token,getPost, setGetPost } = useContext(LoginContext);
   const handleCreatPost = () => {
     axios
       .post("http://localhost:5000/post/", post, {
@@ -22,6 +22,9 @@ const Share = () => {
       .then((res) => {
         console.log(res.data);
         setMessage(res.data.message)
+        // setGetPost((pre)=>{return [...pre,...res.data.post]})
+        const a=[res.data.post]
+        setGetPost([...getPost,...a])
       })
       .catch((err) => {
         console.log(err);

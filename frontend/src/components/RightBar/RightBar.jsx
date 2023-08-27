@@ -10,7 +10,7 @@ const RightBar = () => {
   useEffect(() => {
     handleGetFriendRecived();
     // handleAcceptFriendRecived()
-  }, {});
+  }, []);
   const handleGetFriendRecived = () => {
     axios
       .get(`http://localhost:5000/users/getftreq`, {
@@ -36,19 +36,19 @@ const RightBar = () => {
         },
       })
       .then((res) => {
-  //  const newRec=     friendRec.filter((e,i)=>{
-
-  //       })
-  // setfriendRec(newReq)
+   const newReq=     friendRec.filter((e,i)=>{
+e._id!==senderId;
+        })
+  setfriendRec(newReq)
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-if(friendRec&&friendRec.length===0){
-  return <p>Looding</p>
-}
+// if(friendRec&&friendRec.length===0){
+//   return <p>Looding</p>
+// }
   return (
     <div className="rightBar">
       <div className="container">
@@ -73,58 +73,8 @@ if(friendRec&&friendRec.length===0){
             );
           })}
         </div>
-        <div className="item">
-          <span>Latest Activities</span>
-          <div className="user">
-            <div className="userInfo">
-              <img
-                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
-                alt=""
-              />
-              <p>
-                <span>Jane Doe</span> changed their cover picture
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-          <div className="user">
-            <div className="userInfo">
-              <img
-                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
-                alt=""
-              />
-              <p>
-                <span>Jane Doe</span> changed their cover picture
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-          <div className="user">
-            <div className="userInfo">
-              <img
-                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
-                alt=""
-              />
-              <p>
-                <span>Jane Doe</span> changed their cover picture
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-          <div className="user">
-            <div className="userInfo">
-              <img
-                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
-                alt=""
-              />
-              <p>
-                <span>Jane Doe</span> changed their cover picture
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-        </div>
-        <div className="item">
+   
+        {/* <div className="item">
           <span>Online Friends</span>
           <div className="user">
             <div className="userInfo">
@@ -234,9 +184,9 @@ if(friendRec&&friendRec.length===0){
               />
               <div className="online" />
               <span>Jane Doe</span>
-            </div>
-          </div>
-        </div>
+            </div> 
+           </div> 
+         </div> */}
       </div>
     </div>
   );
