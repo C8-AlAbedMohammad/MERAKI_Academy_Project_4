@@ -20,8 +20,8 @@ const createComment = async (req, res) => {
       })
       .populate({
         path: "comments",
-        select: "firstName lastName -_id",
-      });
+        populate: "commenter",
+      })
     res.status(201).json({
       success: true,
       message: "Comment created successfully.",

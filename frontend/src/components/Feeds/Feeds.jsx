@@ -35,7 +35,10 @@ const Feeds = () => {
       })
       .then((res) => {
         console.log(res.data);
-        setGetPost(res.data.posts);
+        const sortedPosts = res.data.posts.sort((a, b) =>
+          b.dateOfPublish.localeCompare(a.dateOfPublish)
+        );
+        setGetPost(sortedPosts);
         setuserId(res.data.userId);
      
       })
@@ -43,13 +46,7 @@ const Feeds = () => {
         console.log(err);
       });
   };
-  const ifImage = () => {
-    if (post.image) {
-      return <img src={post.image} className="w-100" />;
-    } else {
-      return <div></div>;
-    }
-  };
+
 
   return (
     <div className="feeds">
@@ -94,7 +91,7 @@ const Feeds = () => {
             Share
           </div>
         </div>
-        {commentOpen &&getPostId===post._id&& <Comments Comments={post.comments}/>}
+        {commentOpen &&getPostId===post._id&& <Comments Comments={post.comments} postId={post._id} getPostId={getPostId}/>}
       </div>
     </div>
           );
