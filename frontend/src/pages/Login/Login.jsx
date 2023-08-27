@@ -13,14 +13,15 @@ const Login = () => {
   const [login, setLogin] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault()
+
     axios
       .post("http://localhost:5000/users/login", login)
       .then((res) => {
         console.log(res.data);
         console.log(res.data.token);
         setToken(res.data.token);
-        navigate("/register");
       })
       .catch((err) => {
         console.log(err.response.data.message);
@@ -73,7 +74,7 @@ const Login = () => {
               }}
             />
 
-            <button onClick={handleLogin}>Login</button>
+            <button onClick={(e)=>handleLogin(e)}>Login</button>
            < p className="errorMessage">{errorMessage}</p>
           </form>
         </div>

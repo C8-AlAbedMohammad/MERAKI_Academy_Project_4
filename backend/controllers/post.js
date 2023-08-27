@@ -1,3 +1,4 @@
+const comments = require("../models/comments");
 const postModel = require("../models/post");
 const userModel = require("../models/UserSchema");
 //!--- create post
@@ -35,7 +36,10 @@ const updatePostById = (req, res) => {
     filter[key].toString().replaceAll(" ", "") == "" && delete filter[key];
   });
   postModel
-    .findByIdAndUpdate({ _id: id }, req.body, { new: true })
+    .findByIdAndUpdate({ _id: id }, req.body, { new: true }) .populate({
+      path: "username",
+      select: "firstName lastName -_id",
+    })
     .then((newArticle) => {
       if (!newArticle) {
         return res.status(404).json({
@@ -113,7 +117,6 @@ const likePost = async (req, res) => {
         });
       res.status(200).json({ success: true, message: "post disLiked ." });
     }
-
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Failed to Like a post.", error: error });
@@ -183,13 +186,40 @@ const getUserPostAndFriendPost = async (req, res) => {
   try {
     const userId = req.token.userId;
     console.log(userId);
-    const userPosts = await postModel.find({ username: userId });
-    const user = await userModel.findById(userId).populate("friends");
+    const userPosts = await postModel.find({ username: userId }).populate({
+      path: "username",
+      select: "firstName lastName profilePicture ",
+    }).populate(
+      {
+        path:"comments",
+        populate:{
+          path:"commenter",
+          select: "firstName lastName profilePicture",
+
+        }
+
+      }
+    )
+    const user = await userModel.findById(userId);
     const friends = user.friends;
     console.log(friends);
     const friendPosts = await Promise.all(
       friends.map(async (friend) => {
-        return await postModel.find({ username: friend._id });
+        return await postModel.find({ username: friend._id }).populate({
+          path: "username",
+          select: "firstName lastName  profilePicture -_id",
+         
+        }).populate(
+          {
+            path:"comments",
+            populate:{
+              path:"commenter",
+              select: "firstName lastName profilePicture",
+    
+            }
+    
+          }
+        );
       })
     );
 
@@ -224,5 +254,6 @@ module.exports = {
   updatePostById,
   deletePostById,
   likePost,
-  getPostsById,getUserPostAndFriendPost
+  getPostsById,
+  getUserPostAndFriendPost,
 };

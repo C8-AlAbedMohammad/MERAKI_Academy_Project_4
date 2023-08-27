@@ -1,24 +1,21 @@
 import React, { useState } from "react";
 import "./register.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 const Register = () => {
   const [user, setUser] = useState({});
   const [message, setMessage] = useState("");
   const [errmessage, setErrMessage] = useState("");
   const [showMessage, setshowMessage] = useState(false);
+  const navigate = useNavigate();
 
-    const registerNewUser = () => {
-    
+    const registerNewUser = (e) => {
+    e.preventDefault()
       const birthDate = new Date(user.dateOfBirth);
       const currentDate = new Date();
       const age = currentDate.getFullYear() - birthDate.getFullYear();
   
-      if (age < 18) {
-        setErrMessage("You must be at least 18 years old to register.");
-        setshowMessage(false);
-        setMessage(""); 
-      }
+      
   
     console.log(user);
     axios
@@ -33,10 +30,16 @@ const Register = () => {
       })
       .catch((err) => {
         console.log(err);
+        setshowMessage(false);
         if (err.response.data) {
           setErrMessage(err.response.data.message);
         } 
-        setshowMessage(false);
+        if (age < 18) {
+          setErrMessage("You must be at least 18 years old to register.");
+          setshowMessage(false);
+          setMessage(""); 
+        }
+        
         setMessage("");
       });
   };
@@ -69,7 +72,7 @@ const Register = () => {
               placeholder="last name"
               required
               onChange={(e) => {
-                setUser({ ...user, lasttName: e.target.value });
+                setUser({ ...user, lastName: e.target.value });
               }}
             />
             <input
@@ -89,7 +92,7 @@ const Register = () => {
               }}
             />
       
-            {/* <select
+            <select
               name="Gender"
               onChange={(e) => {
                 setUser({ ...user, gender: e.target.value });
@@ -100,7 +103,7 @@ const Register = () => {
 
               <option value="Male">Male</option>
               <option value="Female">Female</option>
-            </select> */}
+            </select>
             <input
               type="email"
               placeholder="email"
@@ -118,7 +121,7 @@ const Register = () => {
               }}
             />
 
-            <button onClick={registerNewUser}>Login</button>
+            <button onClick={(e)=>{registerNewUser(e)}}>Login</button>
             {/* <Link to="/login"></Link> */}
             
           </form>

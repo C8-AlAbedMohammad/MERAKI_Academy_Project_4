@@ -1,0 +1,107 @@
+.topBar {
+    height: 50px;
+    width: 100%;
+    background-color: #1877F2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: sticky;
+    top: 0;
+
+    .left {
+        flex: 3;
+
+        .logo {
+            font-size: 25px;
+            margin-left: 20px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+    }
+
+    .center {
+        flex: 5;
+
+        .searchBar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 30px;
+            width: 100%;
+
+            .searchIcon {
+                font-size: 25px !important;
+                margin-left: 10px;
+                cursor: pointer;
+
+            }
+
+            .searchInput {
+                height: 30px;
+                border-radius: 10px;
+                border: none;
+                width: 70%;
+                padding: 15px;
+                font-size: 20px;
+            }
+
+            .searchInput:focus {
+                outline: none;
+            }
+        }
+
+
+    }
+
+    .right {
+        flex: 3;
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        .rightNavBar {
+            color: white;
+            font-size: 20px;
+cursor: pointer;
+        }
+
+        .rightBarIcon {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            justify-content: space-between;
+            gap: 15px;
+        
+
+            .icons{
+                cursor: pointer;
+                position: relative;
+            }
+            .badge{
+                height: 15px;
+                width: 15px;
+                background-color: red;
+                border-radius: 50%;
+                position: absolute;
+                top: -5px;
+                left: -5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+            }
+        }
+        .topBarProfilePic{
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+
+        }
+    }
+
+}

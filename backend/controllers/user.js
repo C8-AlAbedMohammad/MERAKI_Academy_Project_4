@@ -25,8 +25,8 @@ const register = (req, res) => {
     email,
     password,
     role: "64e271bbc93475c36974e07b",
-    profilePicture: "",
-    coverPicture: "",
+    profilePicture:"https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1693061596~exp=1693062196~hmac=c1d28bc37c653cf9ef38b5675d75a95824d7f961127f33e41d4815024b13e1a7",
+    coverPicture:"https://img.freepik.com/free-photo/black-white-shot-forest-during-foggy-weather_181624-16669.jpg?w=1380&t=st=1693061757~exp=1693062357~hmac=a7efd4d09a0751b98eee5356f47142a5c738cdbf8e38abecfcbc1bffed95a35d",
     friends: [],
     friendsRequestReceived,
     friendsRequestSent: [],
@@ -100,7 +100,7 @@ const login = (req, res) => {
           token: token,
         });
       } catch (error) {
-        throw new Error(error.message);
+        throw new Error(error);
       }
     })
     .catch((err) => {
@@ -262,6 +262,33 @@ const sendFriendRequest = async (req, res) => {
       .json({ message: "Failed to send friend request.", error: error });
   }
 };
+
+const getFrindRequest=(req,res)=>{
+  usersModel
+  .find({friendsRequestReceived})
+  .populate("friendsRequestReceived")
+  .exec()
+  .then((result) => {
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: `No Friend Request `,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: `The friend  `,
+      result: result,
+    });
+  })
+  .catch((err) => {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  });
+}
 // !---- cancel Friend Request ----
 const cancelFriendRequest  = async (req, res) => {
   try {
@@ -340,5 +367,5 @@ module.exports = {
   getUserById,
   sendFriendRequest,
   cancelFriendRequest,
-  acceptFriendRequest,
+  acceptFriendRequest,getFrindRequest
 };

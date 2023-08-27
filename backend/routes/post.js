@@ -4,7 +4,7 @@ const { createNewPost,updatePostById,deletePostById,likePost,disLikePost,getPost
 const { createComment,
     updateComment,
     deleteComment,
-    addReplyToComment,likeComment}=require("./../controllers/comment");
+    addReplyToComment,likeComment,likeReply,getCommentsFromPostId}=require("./../controllers/comment");
 // Middleware
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -29,9 +29,9 @@ postRouter.post("/like/:postId", authentication,likePost);
 // dislike a Post
 // postRouter.post("/dislike/:postId", authentication,disLikePost);
 // !get post by id
-postRouter.get("/:id",getPostsById)
+postRouter.get("/timeline/:id",getPostsById)
 // !timeline
-postRouter.get("/", authentication,getUserPostAndFriendPost);
+postRouter.get("/timeline", authentication,getUserPostAndFriendPost);
 // ! add comment 
 postRouter.post(
     "/comment/:postId",
@@ -59,6 +59,14 @@ postRouter.post(
     authentication,
     addReplyToComment
   );
-  postRouter.post("/likeComment/:commentId", authentication,likeComment);
+    // ! add like to comment 
 
+  postRouter.post("/likeComment/:commentId", authentication,likeComment);
+    // ! add like to reply 
+
+    postRouter.post("/likeComment/:commentId/:replyId", authentication,likeReply);
+
+
+    // ! Get Comments From post
+    postRouter.get("./comments?postId=:id",getCommentsFromPostId)
 module.exports = postRouter;

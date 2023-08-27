@@ -18,7 +18,10 @@ const createComment = async (req, res) => {
       .findByIdAndUpdate(postId, {
         $push: { comments: savedComment._id },
       })
-      .populate("comments");
+      .populate({
+        path: "comments",
+        select: "firstName lastName -_id",
+      });
     res.status(201).json({
       success: true,
       message: "Comment created successfully.",
@@ -140,46 +143,122 @@ const addReplyToComment = async (req, res) => {
 };
 // !---like a comment
 const likeComment = async (req, res) => {
-    try {
-      const { commentId } = req.params;
-      const userId = req.token.userId;
-  
-      const comment = await commentModel.findById(commentId);
-      console.log(commentId);
-      if (!comment) {
-        return res
-          .status(404)
-          .json({ success: false, message: "comment Not Found " });
-      }
-  
-      if (!comment.likes.includes(userId)) {
-        await commentModel
-          .updateOne({ _id: commentId }, { $push: { likes: userId } })
-          .populate({
-            path: "username",
-            select: "firstName lastName -_id",
-          });
-        res.status(200).json({ success: true, message: "comment Liked ." });
-      } else {
-        await commentModel
-          .updateOne({ _id: commentId }, { $pull: { likes: userId } })
-          .populate({
-            path: "username",
-            select: "firstName lastName -_id",
-          });
-        res.status(200).json({ success: true, message: "comment disLiked ." });
-      }
-  
-    } catch (error) {
-      console.log(error);
-      res.status(400).json({ message: "Failed to Like comment.", error: error });
-    }
-  };
+  try {
+    const { commentId } = req.params;
+    const userId = req.token.userId;
 
+    const comment = await commentModel.findById(commentId);
+    console.log(commentId);
+    if (!comment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "comment Not Found " });
+    }
+
+    if (!comment.likes.includes(userId)) {
+      await commentModel
+        .updateOne({ _id: commentId }, { $push: { likes: userId } })
+        .populate({
+          path: "username",
+          select: "firstName lastName -_id",
+        });
+      res.status(200).json({ success: true, message: "comment Liked ." });
+    } else {
+      await commentModel
+        .updateOne({ _id: commentId }, { $pull: { likes: userId } })
+        .populate({
+          path: "username",
+          select: "firstName lastName -_id",
+        });
+      res.status(200).json({ success: true, message: "comment disLiked ." });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to Like comment.", error: error });
+  }
+};
+const likeReply = async (req, res) => {
+  try {
+    const { commentId, replyId } = req.params;
+    const userId = req.token.userId;
+
+    const reply = await commentModel
+      .findById(commentId)
+      .select("replies")
+      .populate("replies.replier", "firstName lastName");
+    console.log(reply);
+    if (!reply) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Reply Not Found" });
+    }
+
+    const selectedReply = reply.replies.find(
+      (r) => r._id.toString() === replyId
+    );
+    console.log(selectedReply);
+
+    if (!selectedReply) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Reply Not Found" });
+    }
+
+    if (!selectedReply.likes.includes(userId)) {
+      await commentModel.updateOne(
+        { _id: commentId, "replies._id": replyId },
+        { $push: { "replies.&.likes": userId } }
+      );
+      res.status(200).json({ success: true, message: "Reply Liked." });
+    } else {
+      await commentModel.updateOne(
+        { _id: commentId, "replies._id": replyId },
+        { $pull: { "replies.&.likes": userId } }
+      );
+      res.status(200).json({ success: true, message: "Reply Disliked." });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to Like reply.", error: error });
+  }
+};
+
+const getCommentsFromPostId = (req, res) => {
+  let id = req.params.id;
+  postModel
+    .findById(id);
+  const comment=commentModel.find({}).populate({
+      path: "commenter",
+      select: "firstName lastName -_id",
+    })
+    .exec()
+    .then((post) => {
+      if (!post) {
+        return res.status(404).json({
+          success: false,
+          message: `The post with id => ${id} not found`,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: `The post ${id} `,
+        post: post,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
 module.exports = {
   createComment,
   updateComment,
   deleteComment,
   addReplyToComment,
-  likeComment
+  likeComment,
+  likeReply,
+  getCommentsFromPostId,
 };

@@ -1,0 +1,19 @@
+@import "../../App.scss";
+
+.homePage {
+    display: flex;
+width: 100%;
+@include themify($themes) {
+  
+    background-color: themed("bg");
+    color: themed("textColor");
+    &::-webkit-scrollbar {
+        display: none;
+      }
+      .feedsBox{
+        padding: 20px 70px;
+        background-color: themed("bgSoft");
+    flex: 6;
+    }
+}
+}

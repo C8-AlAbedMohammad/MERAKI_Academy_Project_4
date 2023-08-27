@@ -1,6 +1,6 @@
 const express = require("express");
 const authentication=require("../middleware/authentication")
-const { register,login,upDateUser,deleteUserById,getUserById,sendFriendRequest ,cancelFriendRequest,acceptFriendRequest} = require("../controllers/user");
+const { register,login,upDateUser,deleteUserById,getUserById,sendFriendRequest ,cancelFriendRequest,acceptFriendRequest,getFrindRequest} = require("../controllers/user");
 
 const usersRouter = express.Router();
 // register user
@@ -12,11 +12,15 @@ usersRouter.put("/update/:id", upDateUser);
 // delete user
 usersRouter.delete("/delete/:id", deleteUserById);
 // get user bu id
+usersRouter.get("/getftreq",authentication, getFrindRequest);
+usersRouter.get("/:id",authentication, getUserById);
+// get friend req
 
-usersRouter.get("/:id", getUserById);
 
 // send friend request
 usersRouter.post("/sendrequest/:receiverId",authentication, sendFriendRequest);
+ 
+
 // cancel friend request
 usersRouter.post("/cancelrequest/:receiverId",authentication, cancelFriendRequest);
 // accept friend request
