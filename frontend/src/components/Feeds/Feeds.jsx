@@ -7,6 +7,7 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { Dropdown } from "react-bootstrap";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
@@ -19,10 +20,9 @@ const Feeds = () => {
   useEffect(() => {
     handleGetPost();
   }, []);
-  const { token, getPost, setGetPost,currntUser } = useContext(LoginContext);
-
+  const { token, getPost, setGetPost, currntUser } = useContext(LoginContext);
   const [getPostId, setGetPostId] = useState("");
-
+console.log(currntUser);
   const [userId, setuserId] = useState("");
   const handleGetPost = () => {
     axios
@@ -33,10 +33,9 @@ const Feeds = () => {
       })
       .then((res) => {
         console.log(res.data);
-       
 
         const sortedPosts = res.data.posts.sort((a, b) =>
-          b.dateOfPublish.localeCompare(a.dateOfPublish)
+          b.createdAt?.localeCompare(a.createdAt)
         );
         setGetPost(sortedPosts);
         setuserId(res.data.userId);
@@ -48,13 +47,17 @@ const Feeds = () => {
   const handleLike = (postId) => {
     console.log(token);
     axios
-      .post(`http://localhost:5000/post/like/${postId}`,{} ,{
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
+      .post(
+        `http://localhost:5000/post/like/${postId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
-        handleGetPost()
+        handleGetPost();
       })
 
       .catch((err) => {
@@ -80,20 +83,40 @@ const Feeds = () => {
                         <span className="name">{post.username.firstName}</span>
                       </Link>
                       <span className="date">
-                        {moment(post.dateOfPublish).fromNow()}
+                        {/* {moment(post.dateOfPublish)
+                          .startOf("minte")
+                          .format("MMM Do YY")} */}
+                        {moment(post.createdAt).fromNow()}
                       </span>
                     </div>
                   </div>
-                  <MoreHorizIcon />
+                  {/* <MoreHorizIcon /> */}
+                  {post.username._id===currntUser.userId&& <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                      
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Edit Post</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">
+                        Delete Post
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>}
                 </div>
                 <div className="content">
                   <p>{post.description}</p>
                   <img src={post.image} alt="" />
                 </div>
                 <div className="info">
-                  <div className="item" onClick={() => {handleLike(post._id); 
-                    setGetPostId(post._id)}}>
-                    {post.likes.includes(currntUser) &&getPostId===post._id? (
+                  <div
+                    className="item"
+                    onClick={() => {
+                      handleLike(post._id);
+                      setGetPostId(post._id);
+                    }}
+                  >
+                    {post.likes.includes(currntUser.userId) ? (
                       <FavoriteOutlinedIcon />
                     ) : (
                       <FavoriteBorderOutlinedIcon />

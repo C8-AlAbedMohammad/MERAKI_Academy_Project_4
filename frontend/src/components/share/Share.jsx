@@ -11,7 +11,7 @@ const Share = () => {
   const [post, setPost] = useState([]);
   const [message, setMessage] = useState("");
 
-  const { token,getPost, setGetPost,userInfo,setUserInfo } = useContext(LoginContext);
+  const { token,getPost, setGetPost,userInfo,setUserInfo,currntUser } = useContext(LoginContext);
   const handleCreatPost = () => {
     axios
       .post("http://localhost:5000/post/", post, {
@@ -24,7 +24,11 @@ const Share = () => {
         setMessage(res.data.message)
         // setGetPost((pre)=>{return [...pre,...res.data.post]})
         const a=[res.data.post]
-        setGetPost([...getPost,...a])
+        setGetPost((pre)=>[...pre,...a])
+        const sortedPosts = res.data.posts.sort((a, b) =>
+        b.dateOfPublish.localeCompare(a.dateOfPublish)
+      );
+      setGetPost(sortedPosts)
       })
       .catch((err) => {
         console.log(err);
@@ -35,10 +39,10 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <img
-          src={userInfo.profilePicture}
+          src={currntUser.profilePicture}
             alt=""
           />
-          <input type="text" placeholder={`What's on your mind ...?`} onChange={(e) => {
+          <input type="text" placeholder={`What's on your mind  ${currntUser.firstName}...?`} onChange={(e) => {
           setPost({ ...post, description: e.target.value });
         }} />
         </div>

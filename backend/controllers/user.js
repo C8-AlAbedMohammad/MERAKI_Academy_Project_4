@@ -67,7 +67,7 @@ const login = (req, res) => {
 
   usersModel
     .findOne({ $or: [{ email }, { username }] })
-    .populate("role")
+    .populate("role").populate("friends")
     .then(async (result) => {
       console.log(result);
       if (!result) {
@@ -98,10 +98,13 @@ const login = (req, res) => {
           success: true,
           message: `Valid login credentials`,
           token: token,
-          userId: result._id,
+          userInfo: { userId:result._id,
           firstName:result.firstName,
-          profilePicture:result.profilePicture
-        });
+          lastName:result.lastName,
+          profilePicture:result.profilePicture,
+          friends:result.friends
+          }}
+         );
       } catch (error) {
         throw new Error(error);
       }

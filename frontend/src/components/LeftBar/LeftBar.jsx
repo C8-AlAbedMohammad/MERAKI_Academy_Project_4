@@ -14,21 +14,24 @@ import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
 import { useContext } from "react";
 import { LoginContext } from "../../App";
+import { Link } from "react-router-dom";
 
 const LeftBar = () => {
-  const { token,userInfo,setUserInfo, userInfoLogin,setUserInfoLoging} = useContext(LoginContext);
-console.log(userInfoLogin);
+  const { token,userInfo,setUserInfo, userInfoLogin,setUserInfoLoging,currntUser} = useContext(LoginContext);
 
   return (
     <div className="leftBar">
       <div className="container">
         <div className="menu">
           <div className="user">
+            
             <img
-            src={userInfo.profilePicture}
+            src={currntUser.profilePicture}
               alt=""
             />
-            <span>{userInfo.firstName} </span>
+            <Link to={`/profile/${currntUser.userId}`} >
+            <span>{currntUser.firstName} {currntUser.lastName} </span>
+            </Link>
           </div>
           <div className="item">
             <img src={Friends} alt="" />

@@ -9,6 +9,7 @@ const createNewPost = (req, res) => {
     image,
     description,
     username,
+    dateOfPublish:Date.now()
   });
 
   newPost

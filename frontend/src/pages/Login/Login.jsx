@@ -23,8 +23,8 @@ const Login = () => {
         console.log(res.data);
         console.log(res.data.token);
         setToken(res.data.token);
-        setCurrntUser(res.data.userId)
-        setUserInfoLoging(res.data.firstName)
+        setCurrntUser(res.data.userInfo)
+        setUserInfoLoging(res.data.firstName,)
        
         setTimeout(() => {
            navigate("/")
@@ -40,7 +40,7 @@ const Login = () => {
     if (token) {
       setIsLoggedIn(true);
       localStorage.setItem("token", token);
-      localStorage.setItem("userId",currntUser)
+      localStorage.setItem("userInfo",JSON.stringify(currntUser))
       setTimeout(() => {
         navigate("/")
      }, 2000);

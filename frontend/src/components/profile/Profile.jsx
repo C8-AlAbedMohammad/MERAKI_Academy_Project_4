@@ -21,10 +21,10 @@ const Profile = () => {
 // console.log(id);
   useEffect(() => {
     handleGetCurrntUser();
-  }, {currntUser});
+  }, [currntUser]);
   const handleGetCurrntUser = () => {
     axios
-      .get(`http://localhost:5000/users/${currntUser}`, {
+      .get(`http://localhost:5000/users/${currntUser.userId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },

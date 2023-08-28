@@ -11,7 +11,10 @@ function App() {
   const [getPost, setGetPost] = useState([]);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [ currntUser, setCurrntUser ] = useState(localStorage.getItem("userId") || "");
+  // const [ currntUser, setCurrntUser ] = useState(localStorage.getItem("userInfo") || "");
+  const storedUserInfo = localStorage.getItem("userInfo");
+  const [currntUser, setCurrntUser] = useState(
+    storedUserInfo ? JSON.parse(storedUserInfo) : {});
   const [userInfo,setUserInfo]=useState([])
   const [userInfoLogin,setUserInfoLoging]=useState([])
 
@@ -28,7 +31,7 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/login" element={<Login />} />
-          <Route path={`/profile/${currntUser}`} element={<Profile />} />
+          <Route path={`/profile/${currntUser.userId}`} element={<Profile />} />
 
           <Route path="/register" element={<Register />} />
         </Routes>
