@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
 import "./navBar.scss"
 import "../images/1.jpg"
+import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../../App";
 const NavBar = () => {
+  const { token, setToken, isLoggedIn, setIsLoggedIn, currntUser, setCurrntUser } =
+  useContext(LoginContext);
+  const navigate = useNavigate();
+
   return (
     <div className="topBar">
       <div className="left">
-        <span className="logo">Logo Here</span>
+        <span className="logo" onClick={navigate("/")}>Logo Here</span>
       </div>
       <div className="center">
         <div className="searchBar">
@@ -26,13 +32,13 @@ const NavBar = () => {
           <div className="icons">
             <Chat />
             <span className="badge">3</span>
-          </div>{" "}
+          </div>
           <div className="icons">
             <Notifications />
             <span className="badge">4</span>
           </div>
         </div>
-        <img src="https://images.pexels.com/photos/17901179/pexels-photo-17901179/free-photo-of-toddler-standing-in-a-tub.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="images" className="topBarProfilePic" />
+        <img src="https://images.pexels.com/photos/17901179/pexels-photo-17901179/free-photo-of-toddler-standing-in-a-tub.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="images" className="topBarProfilePic" onClick={navigate(`/profile/${currntUser}`)} />
       </div>
     </div>
   );

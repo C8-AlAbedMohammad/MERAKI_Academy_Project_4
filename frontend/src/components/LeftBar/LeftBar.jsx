@@ -13,8 +13,10 @@ import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
 import { useContext } from "react";
+import { LoginContext } from "../../App";
 
 const LeftBar = () => {
+  const { token,userInfo,setUserInfo } = useContext(LoginContext);
 
 
   return (
@@ -23,10 +25,10 @@ const LeftBar = () => {
         <div className="menu">
           <div className="user">
             <img
-              src="{currentUser.profilePic}"
+            src={userInfo.profilePicture}
               alt=""
             />
-            <span>"sdfsd"</span>
+            <span>{userInfo.fistName} {userInfo.lastName}</span>
           </div>
           <div className="item">
             <img src={Friends} alt="" />

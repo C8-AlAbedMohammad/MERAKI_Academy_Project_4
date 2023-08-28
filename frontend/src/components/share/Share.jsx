@@ -11,7 +11,7 @@ const Share = () => {
   const [post, setPost] = useState([]);
   const [message, setMessage] = useState("");
 
-  const { token,getPost, setGetPost } = useContext(LoginContext);
+  const { token,getPost, setGetPost,userInfo,setUserInfo } = useContext(LoginContext);
   const handleCreatPost = () => {
     axios
       .post("http://localhost:5000/post/", post, {
@@ -35,7 +35,7 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <img
-            src={"currentUser.profilePicture"}
+          src={userInfo.profilePicture}
             alt=""
           />
           <input type="text" placeholder={`What's on your mind ...?`} onChange={(e) => {

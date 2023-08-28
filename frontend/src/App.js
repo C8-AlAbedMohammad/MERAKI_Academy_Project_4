@@ -12,20 +12,23 @@ function App() {
   const [getPost, setGetPost] = useState([]);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [ currntUser, setCurrntUser ] = useState(localStorage.getItem("userId") || "");
+  const [userInfo,setUserInfo]=useState([])
+
   // if (!isLoggedIn) {
   //   navigate("/register");
   // }
 
   return (
     <LoginContext.Provider
-      value={{ token, setToken, isLoggedIn, setIsLoggedIn,getPost, setGetPost }}
+      value={{ token, setToken, isLoggedIn, setIsLoggedIn,getPost, setGetPost , currntUser, setCurrntUser,userInfo,setUserInfo}}
     >
       <div className="theme-light">
         <Routes>
           <Route path="/" element={<Home />} />
 
           <Route path="/login" element={<Login />} />
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path={`/profile/${currntUser}`} element={<Profile />} />
 
           <Route path="/register" element={<Register />} />
         </Routes>

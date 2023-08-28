@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../App";
 
 const RightBar = () => {
-  const { token } = useContext(LoginContext);
+  const { token,userInfo,setUserInfo } = useContext(LoginContext);
   const [friendRec, setfriendRec] = useState({});
 
   useEffect(() => {

@@ -16,22 +16,22 @@ import NavBar from "../NavBar/NavBar";
 import { useParams } from "react-router-dom";
 
 const Profile = () => {
-  const { token } = useContext(LoginContext);
-    const { currntUser, setCurrntUser } = useState({});
-const {id}=useParams()
-console.log(id);
+  const { token, currntUser, setCurrntUser ,userInfo,setUserInfo} = useContext(LoginContext);
+// const {id}=useParams()
+// console.log(id);
   useEffect(() => {
     handleGetCurrntUser();
   }, {currntUser});
   const handleGetCurrntUser = () => {
     axios
-      .get(`http://localhost:5000/users/${id}`, {
+      .get(`http://localhost:5000/users/${currntUser}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.result);
+        setUserInfo(res.data.result)
       })
       .catch((err) => {
         console.log(err);
@@ -43,12 +43,12 @@ console.log(id);
       <NavBar/>
       <div className="images">
         <img
-          src="https://images.pexels.com/photos/13440765/pexels-photo-13440765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          src={userInfo.coverPicture}
           alt=""
           className="cover"
         />
         <img
-          src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
+          src={userInfo.profilePicture}
           alt=""
           className="profilePic"
         />
@@ -73,7 +73,7 @@ console.log(id);
             </a>
           </div>
           <div className="center">
-            <span>Jane Doe</span>
+            <span>{userInfo.firstName} {userInfo.lastName}</span>
             <div className="info">
               <div className="item">
                 <PlaceIcon />
@@ -84,12 +84,13 @@ console.log(id);
                 <span>username</span>
               </div>
             </div>
-            <button>follow</button>
+          {userInfo._id===-1&& <button>follow</button>} 
           </div>
           <div className="right">
             <EmailOutlinedIcon />
             <MoreVertIcon />
           </div>
+    
         </div>
         <Feeds />
       </div>

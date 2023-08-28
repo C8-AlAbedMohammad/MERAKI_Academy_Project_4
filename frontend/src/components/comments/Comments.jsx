@@ -26,6 +26,7 @@ console.log(postId,getPostId);
         console.log(err);
       });
   };
+  
 
   // console.log(Comments);
   return (
