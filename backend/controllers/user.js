@@ -99,6 +99,8 @@ const login = (req, res) => {
           message: `Valid login credentials`,
           token: token,
           userId: result._id,
+          firstName:result.firstName,
+          profilePicture:result.profilePicture
         });
       } catch (error) {
         throw new Error(error);

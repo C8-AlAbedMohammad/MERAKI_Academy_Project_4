@@ -5,10 +5,10 @@ import { LoginContext } from "../../App";
 import axios from "axios";
 
 const Login = () => {
-  const { token, setToken, isLoggedIn, setIsLoggedIn, currntUser, setCurrntUser } =
+  const { token, setToken, isLoggedIn, setIsLoggedIn, currntUser, setCurrntUser ,userInfoLogin,setUserInfoLoging} =
     useContext(LoginContext);
+    const navigate = useNavigate();
 
-  const navigate = useNavigate();
 
   const [login, setLogin] = useState({});
 
@@ -24,6 +24,11 @@ const Login = () => {
         console.log(res.data.token);
         setToken(res.data.token);
         setCurrntUser(res.data.userId)
+        setUserInfoLoging(res.data.firstName)
+       
+        setTimeout(() => {
+           navigate("/")
+        }, 2000);
       })
       .catch((err) => {
         console.log(err);
@@ -36,6 +41,9 @@ const Login = () => {
       setIsLoggedIn(true);
       localStorage.setItem("token", token);
       localStorage.setItem("userId",currntUser)
+      setTimeout(() => {
+        navigate("/")
+     }, 2000);
     } else {
       setIsLoggedIn(false);
       localStorage.removeItem("token");

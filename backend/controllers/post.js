@@ -192,13 +192,13 @@ const getUserPostAndFriendPost = async (req, res) => {
     console.log(userId);
     const userPosts = await postModel.find({ username: userId }).populate({
       path: "username",
-      select: "firstName lastName profilePicture ",
+      select: "firstName lastName profilePicture _id ",
     }).populate(
       {
         path:"comments",
         populate:{
           path:"commenter",
-          select: "firstName lastName profilePicture",
+          select: "firstName lastName profilePicture _id",
 
         }
 

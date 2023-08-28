@@ -16,8 +16,8 @@ import { useContext } from "react";
 import { LoginContext } from "../../App";
 
 const LeftBar = () => {
-  const { token,userInfo,setUserInfo } = useContext(LoginContext);
-
+  const { token,userInfo,setUserInfo, userInfoLogin,setUserInfoLoging} = useContext(LoginContext);
+console.log(userInfoLogin);
 
   return (
     <div className="leftBar">
@@ -28,7 +28,7 @@ const LeftBar = () => {
             src={userInfo.profilePicture}
               alt=""
             />
-            <span>{userInfo.fistName} {userInfo.lastName}</span>
+            <span>{userInfo.firstName} </span>
           </div>
           <div className="item">
             <img src={Friends} alt="" />

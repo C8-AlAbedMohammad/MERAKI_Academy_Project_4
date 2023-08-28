@@ -5,14 +5,13 @@ import "../images/1.jpg"
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../App";
 const NavBar = () => {
-  const { token, setToken, isLoggedIn, setIsLoggedIn, currntUser, setCurrntUser } =
+  const { token, setToken, isLoggedIn, setIsLoggedIn, currntUser, setCurrntUser ,userInfo} =
   useContext(LoginContext);
-  const navigate = useNavigate();
 
   return (
     <div className="topBar">
       <div className="left">
-        <span className="logo" onClick={navigate("/")}>Logo Here</span>
+        <span className="logo" >Logo Here</span>
       </div>
       <div className="center">
         <div className="searchBar">
@@ -27,7 +26,7 @@ const NavBar = () => {
         <div className="rightBarIcon">
           <div className="icons">
             <Person />
-            <span className="badge">2</span>
+            <span className="badge">4</span>
           </div>
           <div className="icons">
             <Chat />
@@ -38,7 +37,7 @@ const NavBar = () => {
             <span className="badge">4</span>
           </div>
         </div>
-        <img src="https://images.pexels.com/photos/17901179/pexels-photo-17901179/free-photo-of-toddler-standing-in-a-tub.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="images" className="topBarProfilePic" onClick={navigate(`/profile/${currntUser}`)} />
+        <img src={userInfo.profilePicture} alt="images" className="topBarProfilePic"  />
       </div>
     </div>
   );

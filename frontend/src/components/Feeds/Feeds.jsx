@@ -16,11 +16,10 @@ import Comments from "../comments/Comments";
 import moment from "moment/moment";
 const Feeds = () => {
   const [commentOpen, setCommentOpen] = useState(false);
-  const [liked, setLiked] = useState(false);
   useEffect(() => {
     handleGetPost();
   }, []);
-  const { token, getPost, setGetPost } = useContext(LoginContext);
+  const { token, getPost, setGetPost,currntUser } = useContext(LoginContext);
 
   const [getPostId, setGetPostId] = useState("");
 
@@ -34,6 +33,8 @@ const Feeds = () => {
       })
       .then((res) => {
         console.log(res.data);
+       
+
         const sortedPosts = res.data.posts.sort((a, b) =>
           b.dateOfPublish.localeCompare(a.dateOfPublish)
         );
@@ -45,15 +46,15 @@ const Feeds = () => {
       });
   };
   const handleLike = (postId) => {
+    console.log(token);
     axios
-      .post(`http://localhost:5000/post/like/${postId}`, {
+      .post(`http://localhost:5000/post/like/${postId}`,{} ,{
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        console.log(res);
-        setLiked(!liked);
+        handleGetPost()
       })
 
       .catch((err) => {
@@ -92,7 +93,7 @@ const Feeds = () => {
                 <div className="info">
                   <div className="item" onClick={() => {handleLike(post._id); 
                     setGetPostId(post._id)}}>
-                    {liked &&getPostId===post._id? (
+                    {post.likes.includes(currntUser) &&getPostId===post._id? (
                       <FavoriteOutlinedIcon />
                     ) : (
                       <FavoriteBorderOutlinedIcon />

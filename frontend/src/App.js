@@ -8,12 +8,12 @@ import React, { useState, createContext, useEffect } from "react";
 import Profile from './components/profile/Profile';
 export const LoginContext = createContext();
 function App() {
-  const navigate = useNavigate();
   const [getPost, setGetPost] = useState([]);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [ currntUser, setCurrntUser ] = useState(localStorage.getItem("userId") || "");
   const [userInfo,setUserInfo]=useState([])
+  const [userInfoLogin,setUserInfoLoging]=useState([])
 
   // if (!isLoggedIn) {
   //   navigate("/register");
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <LoginContext.Provider
-      value={{ token, setToken, isLoggedIn, setIsLoggedIn,getPost, setGetPost , currntUser, setCurrntUser,userInfo,setUserInfo}}
+      value={{ token, setToken, isLoggedIn, setIsLoggedIn,getPost, setGetPost , currntUser, setCurrntUser,userInfo,setUserInfo,userInfoLogin,setUserInfoLoging}}
     >
       <div className="theme-light">
         <Routes>
