@@ -377,6 +377,27 @@ console.log(requestIndex);
       .json({ message: "Failed to accept friend request.", error: error });
 }
 }
+// !serch for user 
+
+const secrhUser=async (req,res)=>{
+  const searchQuery = req.query.q;
+  try {
+    const regex = new RegExp(searchQuery)
+    const users = await usersModel.find({
+      $or: [
+        { firstName: regex },
+        { lastName: regex }
+      ]
+    });
+    res
+    .status(200)
+    .json({ success: true, message: "search for friend .", users:users});
+  } catch (error) {
+    res.status(500).json({ message: 'Failed  request searching for users.' });
+  }
+}
+
+
 
 module.exports = {
   register,
@@ -386,5 +407,5 @@ module.exports = {
   getUserById,
   sendFriendRequest,
   cancelFriendRequest,
-  acceptFriendRequest,getFrindRequest
+  acceptFriendRequest,getFrindRequest,secrhUser
 };

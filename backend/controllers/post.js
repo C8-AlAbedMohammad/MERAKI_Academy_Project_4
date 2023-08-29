@@ -229,7 +229,8 @@ const getUserPostAndFriendPost = async (req, res) => {
     );
 
     const allPosts = [...userPosts, ...friendPosts.flat()];
-    allPosts.sort((a, b) => b.date - a.date);
+    console.log(allPosts);
+    allPosts.sort((a, b) => b.createdAt - a.createdAt);
     res.status(200).json({
       success: true,
       message: "User and friends' posts ",

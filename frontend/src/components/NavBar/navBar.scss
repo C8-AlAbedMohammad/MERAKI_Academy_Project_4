@@ -109,3 +109,22 @@ cursor: pointer;
     }
 
 }
+dl, ol, ul {
+    position: absolute;
+    top: 50px;
+    margin-bottom: 1rem;
+}
+dl, ol, ul li{
+background-color: white;
+width: 600px;
+text-decoration: none;
+position: relative;
+top: -9.5px;
+}
+
+.userProfilePicture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }

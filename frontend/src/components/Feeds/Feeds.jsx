@@ -22,7 +22,7 @@ const Feeds = () => {
   }, []);
   const { token, getPost, setGetPost, currntUser } = useContext(LoginContext);
   const [getPostId, setGetPostId] = useState("");
-console.log(currntUser);
+// console.log(currntUser);
   const [userId, setuserId] = useState("");
   const handleGetPost = () => {
     axios
@@ -32,7 +32,7 @@ console.log(currntUser);
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
 
         const sortedPosts = res.data.posts.sort((a, b) =>
           b.createdAt?.localeCompare(a.createdAt)
@@ -64,11 +64,34 @@ console.log(currntUser);
         console.error(err);
       });
   };
+  const handleDeletePost = (id) => {
+    axios
+      .delete(`http://localhost:5000/post/${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        // setMessage(res.data.message);
+        setTimeout(() => {
+          setGetPost(
+            getPost.filter((post) => {
+              return post._id !== id;
+            })
+          );
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="feeds">
       {getPost &&
         getPost.map((post, i) => {
+          
           return (
             <div className="post" key={i}>
               <div className="container">
@@ -83,22 +106,19 @@ console.log(currntUser);
                         <span className="name">{post.username.firstName}</span>
                       </Link>
                       <span className="date">
-                        {/* {moment(post.dateOfPublish)
-                          .startOf("minte")
-                          .format("MMM Do YY")} */}
+                     
                         {moment(post.createdAt).fromNow()}
                       </span>
                     </div>
                   </div>
-                  {/* <MoreHorizIcon /> */}
                   {post.username._id===currntUser.userId&& <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                       
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Edit Post</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
+                      <Dropdown.Item >Edit Post</Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{handleDeletePost(post._id)}}>
                         Delete Post
                       </Dropdown.Item>
                     </Dropdown.Menu>

@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
 import "./navBar.scss";
 import "../images/1.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../../App";
+import axios from "axios";
 const NavBar = () => {
   const {
     token,
@@ -15,6 +16,34 @@ const NavBar = () => {
     userInfo,
   } = useContext(LoginContext);
   const navigate = useNavigate();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [matchingUsers, setMatchingUsers] = useState([]);
+
+  useEffect(() => {
+    if (searchQuery.trim() !== "") {
+      axios
+        .get(
+          `http://localhost:5000/users/search?q=${encodeURIComponent(
+            searchQuery
+          )}`,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          setMatchingUsers(res.data.users);
+        })
+        .catch((error) => {
+          console.error("Error searching for users:", error);
+        });
+    } else {
+      setMatchingUsers([]);
+    }
+  }, [searchQuery]);
 
   return (
     <div className="topBar">
@@ -30,7 +59,18 @@ const NavBar = () => {
             type="search"
             placeholder="Search..."
             className="searchInput"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <ul>
+            {matchingUsers.map((user) => (
+              <li key={user._id}>  <img
+              src={user.profilePicture}
+              alt=""
+              className="userProfilePicture"
+            /> {user.firstName} {user.lastName}</li>
+            ))}
+          </ul>
         </div>
       </div>
       <div className="right">
@@ -54,13 +94,15 @@ const NavBar = () => {
           </div>
         </div>
         <Link to={`/profile/${currntUser.userId}`}>
-        <img
-          src={currntUser.profilePicture}
-          alt="images"
-          className="topBarProfilePic"
-        /></Link>
-         <Link to={`/profile/${currntUser.userId}`}>
-        <span>{currntUser.firstName}</span></Link>
+          <img
+            src={currntUser.profilePicture}
+            alt="images"
+            className="topBarProfilePic"
+          />
+        </Link>
+        <Link to={`/profile/${currntUser.userId}`}>
+          <span>{currntUser.firstName}</span>
+        </Link>
       </div>
     </div>
   );
