@@ -64,11 +64,11 @@ const NavBar = () => {
           />
           <ul>
             {matchingUsers.map((user) => (
-              <li key={user._id}>  <img
+             <Link to={`/profile/${user._id}`}> <li key={user._id}>  <img
               src={user.profilePicture}
               alt=""
               className="userProfilePicture"
-            /> {user.firstName} {user.lastName}</li>
+            /> {user.firstName} {user.lastName}</li></Link>
             ))}
           </ul>
         </div>

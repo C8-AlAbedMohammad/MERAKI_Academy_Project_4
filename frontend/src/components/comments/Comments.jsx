@@ -16,7 +16,7 @@ const Comments = ({ Comments, postId, getPostId }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const b = getPost.map((e) => {
           if (e._id === idPost) {
             e.comments.push({ comment: comment, commenter: currntUser });

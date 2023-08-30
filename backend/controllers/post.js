@@ -159,23 +159,23 @@ const likePost = async (req, res) => {
 const getPostsById = (req, res) => {
   let id = req.params.id;
   postModel
-    .findById(id)
+    .find({ username: id }) 
     .populate({
       path: "username",
       select: "firstName lastName profilePicture -_id",
     })
     .exec()
-    .then((post) => {
-      if (!post) {
+    .then((posts) => {
+      if (posts.length === 0) {
         return res.status(404).json({
           success: false,
-          message: `The post with id => ${id} not found`,
+          message: `No posts found for user with id => ${id}`,
         });
       }
       res.status(200).json({
         success: true,
-        message: `The post ${id} `,
-        post: post,
+        message: `Posts for user ${id}`,
+        posts: posts,
       });
     })
     .catch((err) => {
@@ -212,14 +212,14 @@ const getUserPostAndFriendPost = async (req, res) => {
       friends.map(async (friend) => {
         return await postModel.find({ username: friend._id }).populate({
           path: "username",
-          select: "firstName lastName  profilePicture -_id",
+          select: "firstName lastName  profilePicture _id",
          
         }).populate(
           {
             path:"comments",
             populate:{
               path:"commenter",
-              select: "firstName lastName profilePicture",
+              select: "firstName lastName profilePicture _id",
     
             }
     

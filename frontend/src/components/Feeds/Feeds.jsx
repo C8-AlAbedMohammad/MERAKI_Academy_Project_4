@@ -37,6 +37,7 @@ const Feeds = () => {
         const sortedPosts = res.data.posts.sort((a, b) =>
           b.createdAt?.localeCompare(a.createdAt)
         );
+        console.log(sortedPosts);
         setGetPost(sortedPosts);
         setuserId(res.data.userId);
       })
@@ -45,7 +46,6 @@ const Feeds = () => {
       });
   };
   const handleLike = (postId) => {
-    console.log(token);
     axios
       .post(
         `http://localhost:5000/post/like/${postId}`,
@@ -57,6 +57,14 @@ const Feeds = () => {
         }
       )
       .then((res) => {
+        console.log(res.data);
+        // const b = getPost.map((e) => {
+        //   if (e._id === postId) {
+        //     e.push({ ...getPost,likes:currntUser._id });
+        //   }
+        //   return e;
+        // });
+        // setGetPost(b);
         handleGetPost();
       })
 

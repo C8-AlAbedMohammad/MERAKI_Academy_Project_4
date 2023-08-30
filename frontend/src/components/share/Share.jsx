@@ -88,6 +88,7 @@ const Share = () => {
               setPost({ ...post, description: e.target.value });
             }}
           />
+          <img src={imgUrl}/>
         </div>
         <hr />
         <div className="bottom">
@@ -100,6 +101,7 @@ const Share = () => {
                 setImg(e.target.files[0]);
               }}
             />
+            
             {/* <FileBase64 multiple={false} onDone={({base64})=>{ setPost({ ...post, image: base64 });}} style={{ display: "none"  }} className="fileInput"/> */}
 
             <label htmlFor="file">

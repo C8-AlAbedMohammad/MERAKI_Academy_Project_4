@@ -31,7 +31,7 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/login" element={<Login />} />
-          <Route path={`/profile/${currntUser.userId}`} element={<Profile />} />
+          <Route path={`/profile/:userId`} element={<Profile />} />
 
           <Route path="/register" element={<Register />} />
         </Routes>
