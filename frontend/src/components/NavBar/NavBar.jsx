@@ -5,6 +5,10 @@ import "../images/1.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../../App";
 import axios from "axios";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
+import { Dropdown } from "react-bootstrap";
+
 const NavBar = () => {
   const {
     token,
@@ -14,12 +18,21 @@ const NavBar = () => {
     currntUser,
     setCurrntUser,
     userInfo,
+    toggle,
+    darkMode,
   } = useContext(LoginContext);
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [matchingUsers, setMatchingUsers] = useState([]);
+  const logOut=()=>{
+      setIsLoggedIn(false);
+      setToken(localStorage.removeItem('token')) ;
+      setToken(localStorage.removeItem('userInfo')) ;
+      setToken(localStorage.removeItem('darkMode')) ;
 
+      navigate("/login")
+  }
   useEffect(() => {
     if (searchQuery.trim() !== "") {
       axios
@@ -38,7 +51,7 @@ const NavBar = () => {
           setMatchingUsers(res.data.users);
         })
         .catch((error) => {
-          console.error("Error searching for users:", error);
+          console.error(error);
         });
     } else {
       setMatchingUsers([]);
@@ -64,11 +77,18 @@ const NavBar = () => {
           />
           <ul>
             {matchingUsers.map((user) => (
-             <Link to={`/profile/${user._id}`}> <li key={user._id}>  <img
-              src={user.profilePicture}
-              alt=""
-              className="userProfilePicture"
-            /> {user.firstName} {user.lastName}</li></Link>
+              <Link to={`/profile/${user._id}`}>
+                {" "}
+                <li key={user._id}>
+                  {" "}
+                  <img
+                    src={user.profilePicture}
+                    alt=""
+                    className="userProfilePicture"
+                  />{" "}
+                  {user.firstName} {user.lastName}
+                </li>
+              </Link>
             ))}
           </ul>
         </div>
@@ -92,8 +112,13 @@ const NavBar = () => {
             <Notifications />
             <span className="badge">4</span>
           </div>
+          {darkMode ? (
+            <WbSunnyOutlinedIcon onClick={toggle} />
+          ) : (
+            <DarkModeOutlinedIcon onClick={toggle} />
+          )}
         </div>
-        <Link to={`/profile/${currntUser.userId}`}>
+        {/* <Link to={`/profile/${currntUser.userId}`}>
           <img
             src={currntUser.profilePicture}
             alt="images"
@@ -102,7 +127,26 @@ const NavBar = () => {
         </Link>
         <Link to={`/profile/${currntUser.userId}`}>
           <span>{currntUser.firstName}</span>
-        </Link>
+        </Link> */}
+                <Dropdown>
+          <Dropdown.Toggle id="profile-dropdown">
+            <img
+              src={currntUser.profilePicture}
+              alt="Profile"
+              className="topBarProfilePic"
+            />
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu align="right">
+              <Dropdown.Item as={Link} to={`/profile/${currntUser.userId}`}>
+                Profile
+              </Dropdown.Item>
+              <Dropdown.Item onClick={logOut} >
+               Log Out...
+              </Dropdown.Item>
+            </Dropdown.Menu>
+        </Dropdown>
+
       </div>
     </div>
   );

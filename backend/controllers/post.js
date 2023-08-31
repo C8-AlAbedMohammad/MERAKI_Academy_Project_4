@@ -45,8 +45,8 @@ const updatePostById = (req, res) => {
       path: "username",
       select: "firstName lastName -_id",
     })
-    .then((newArticle) => {
-      if (!newArticle) {
+    .then((newPost) => {
+      if (!newPost) {
         return res.status(404).json({
           success: false,
           message: `The post with id => ${id} not found`,
@@ -55,7 +55,7 @@ const updatePostById = (req, res) => {
       res.status(202).json({
         success: true,
         message: `post updated`,
-        article: newArticle,
+        post: newPost,
       });
     })
     .catch((err) => {

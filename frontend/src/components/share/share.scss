@@ -13,15 +13,24 @@
 // flex: 6;
     .container {
       padding: 20px;
-      
+      @include mobile{
+        padding: 5px;      }
       .top {
         display: flex;
         align-items: center;
         gap: 20px;
+        @include mobile{
+          gap: 10px;
+        }
         img {
           width: 40px;
           height: 40px;
           border-radius: 50%;
+          object-fit: cover;
+        }
+        .imgPost {
+          width: 40px;
+          height: 40px;
           object-fit: cover;
         }
 
@@ -32,6 +41,9 @@
           background-color: transparent;
           width: 60%;
           color: themed("textColor");
+          @include mobile{
+            font-size: 12px;
+          }
         }
       }
 

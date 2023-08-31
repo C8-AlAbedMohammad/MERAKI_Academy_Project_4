@@ -40,7 +40,7 @@
       }
 
       .uInfo {
-        height: 180px;
+        height: 250px;
         -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
         -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
         box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
@@ -55,21 +55,28 @@
 
         @include mobile{
           flex-direction: column;
-          height: 30vh;
+          height: 20vh;
           padding: 20px;
           margin-top: 100px;
         }
 
         .left {
           flex: 1;
+          flex-direction: column;
           display: flex;
           gap: 10px;
 
           @include tablet{
             flex-wrap: wrap;
           }
+          @include mobile{
+            display: none;
+            flex-direction: row;
 
-          a{
+            flex-wrap: wrap;
+          }
+
+          p{
             color: themed("textColorSoft");
           }
         }
@@ -119,8 +126,50 @@
           align-items: center;
           justify-content: flex-end;
           gap: 10px;
+          
+          .item-friend {
+          
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: themed("bg");
+            @include mobile{
+              display: none;
+            }
+            span {
+              color: gray;
+            }
+    
+            .user {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin: 20px 0px;
+    
+              .userInfo {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                position: relative;
+    
+                img {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                }
+    
+                .online {
+                  width: 12px;
+                  height: 12px;
+                  border-radius: 50%;
+                  background-color: limegreen;
+                  position: absolute;
+                  top: 0;
+                  left: 15px;
+                }
         }
       }
     }
   }
 }
+}}}

@@ -8,7 +8,7 @@ import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Dropdown } from "react-bootstrap";
-
+import Heart from "react-animated-heart";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -22,7 +22,8 @@ const Feeds = () => {
   }, []);
   const { token, getPost, setGetPost, currntUser } = useContext(LoginContext);
   const [getPostId, setGetPostId] = useState("");
-// console.log(currntUser);
+  const [isClick, setClick] = useState(false);
+  // console.log(currntUser);
   const [userId, setuserId] = useState("");
   const handleGetPost = () => {
     axios
@@ -65,6 +66,7 @@ const Feeds = () => {
         //   return e;
         // });
         // setGetPost(b);
+        setClick(!isClick);
         handleGetPost();
       })
 
@@ -95,11 +97,31 @@ const Feeds = () => {
       });
   };
 
+  const handleUpdatePost = async (postId, ) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/post/${postId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setGetPost((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === postId ? response.data.post : post
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="feeds">
       {getPost &&
         getPost.map((post, i) => {
-          
           return (
             <div className="post" key={i}>
               <div className="container">
@@ -114,23 +136,27 @@ const Feeds = () => {
                         <span className="name">{post.username.firstName}</span>
                       </Link>
                       <span className="date">
-                     
                         {moment(post.createdAt).fromNow()}
                       </span>
                     </div>
                   </div>
-                  {post.username._id===currntUser.userId&& <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                      
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item >Edit Post</Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{handleDeletePost(post._id)}}>
-                        Delete Post
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>}
+                  {post.username._id === currntUser.userId && (
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="success"
+                        id="dropdown-basic"
+                      ></Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item>Edit Post</Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleDeletePost(post._id);
+                          }}>
+                          Delete Post
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  )}
                 </div>
                 <div className="content">
                   <p>{post.description}</p>
@@ -147,7 +173,7 @@ const Feeds = () => {
                     {post.likes.includes(currntUser.userId) ? (
                       <FavoriteOutlinedIcon />
                     ) : (
-                      <FavoriteBorderOutlinedIcon />
+                      <FavoriteBorderOutlinedIcon color="red" />
                     )}
                     {post.likes.length}
                   </div>

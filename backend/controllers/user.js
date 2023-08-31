@@ -129,13 +129,11 @@ const upDateUser = async (req, res) => {
     gender,
     country,
     email,
-    password,
     profilePicture,
     covePicture,
   } = req.body;
   email = email?.toLowerCase();
   username = username?.toLowerCase();
-  password = await bcrypt.hash(password, 10);
   usersModel
     .findByIdAndUpdate(
       { _id: id },
@@ -147,7 +145,6 @@ const upDateUser = async (req, res) => {
         gender,
         country,
         email,
-        password,
         profilePicture,
         covePicture,
       },
@@ -163,6 +160,44 @@ const upDateUser = async (req, res) => {
       res.status(202).json({
         success: true,
         message: `User updated`,
+        updated: update,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
+// update password
+const upDatepassword= async (req, res) => {
+  const { id } = req.params;
+  let {
+    password
+  } = req.body;
+  password = await bcrypt.hash(password, 10);
+  usersModel
+    .findByIdAndUpdate(
+      { _id: id },
+      {
+       
+        password,
+     
+      },
+      { new: true }
+    )
+    .then((update) => {
+      if (!update) {
+        return res.status(404).json({
+          success: false,
+          message: `The user with id => ${id} not found`,
+        });
+      }
+      res.status(202).json({
+        success: true,
+        message: `password updated`,
         updated: update,
       });
     })
@@ -205,7 +240,7 @@ const getUserById = (req, res) => {
   let id = req.params.id;
   usersModel
     .findById(id)
-    .populate("username")
+    .populate("friends")
     .exec()
     .then((result) => {
       if (!result) {

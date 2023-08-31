@@ -17,16 +17,26 @@ function App() {
     storedUserInfo ? JSON.parse(storedUserInfo) : {});
   const [userInfo,setUserInfo]=useState([])
   const [userInfoLogin,setUserInfoLoging]=useState([])
+  const [darkMode, setDarkMode] = useState(
+    JSON.parse(localStorage.getItem("darkMode")) || false
+  );
 
+  const toggle = () => {
+    setDarkMode(!darkMode);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
   // if (!isLoggedIn) {
   //   navigate("/register");
   // }
 
   return (
     <LoginContext.Provider
-      value={{ token, setToken, isLoggedIn, setIsLoggedIn,getPost, setGetPost , currntUser, setCurrntUser,userInfo,setUserInfo,userInfoLogin,setUserInfoLoging}}
+      value={{ token, setToken, isLoggedIn, setIsLoggedIn,getPost, setGetPost , currntUser, setCurrntUser,userInfo,setUserInfo,userInfoLogin,setUserInfoLoging,toggle}}
     >
-      <div className="theme-light">
+      <div className={`theme-${darkMode ? "dark" : "light"}`}>
         <Routes>
           <Route path="/" element={<Home />} />
 

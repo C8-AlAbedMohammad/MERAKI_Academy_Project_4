@@ -108,9 +108,12 @@ hr {
 
     // display: flex;
     // flex: 6;
+    @include mobile{
+      padding: 20px 20px;
+    }
     .container {
       padding: 20px;
-
+width: 100%;
       .user {
         display: flex;
         align-items: center;

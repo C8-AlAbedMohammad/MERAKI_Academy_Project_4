@@ -121,7 +121,7 @@ const Register = () => {
               }}
             />
 
-            <button onClick={(e)=>{registerNewUser(e)}}>Login</button>
+            <button onClick={(e)=>{registerNewUser(e)}}>Register</button>
             {/* <Link to="/login"></Link> */}
             
           </form>

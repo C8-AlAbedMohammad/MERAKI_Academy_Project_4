@@ -21,6 +21,7 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import Comments from "../comments/Comments";
+import EditProfile from "../editProfile/EditProfile";
 
 const Profile = () => {
   const { token, currntUser, setCurrntUser, userInfo, setUserInfo } =
@@ -30,10 +31,19 @@ const Profile = () => {
   const { userId } = useParams();
   const [test, setTest] = useState("");
   const [getPostId, setGetPostId] = useState("");
-  console.log(currntUser._id);
   const [post, setPost] = useState([]);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const openEdit = () => {
+    setIsEditOpen(true);
+  };
+
+  const closeEdit = () => {
+    setIsEditOpen(false);
+    window.location.reload();
+
+  };
   useEffect(() => {
-    
     handleGetCurrntUser();
     getUserPost();
   }, []);
@@ -45,7 +55,7 @@ const Profile = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.result._id);
+        console.log(res.data.result);
         setUserInfo(res.data.result);
         // console.log(currntUser.friends);
         const result = currntUser.friends.map((obj) => obj._id);
@@ -58,7 +68,6 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-    console.log(currntUser);
   };
   const getUserPost = () => {
     axios
@@ -94,6 +103,51 @@ const Profile = () => {
         console.error(err);
       });
   };
+  const handleSendFriendRequest = (receiverId) => {
+    axios
+      .post(
+        `http://localhost:5000/users/sendrequest/${receiverId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+setTimeout(() => {
+          window.location.reload();
+
+}, 2500);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const handleCancelFriendRequest = (receiverId) => {
+    axios
+      .post(
+        `http://localhost:5000/users/cancelrequest/${receiverId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setTimeout(() => {
+          window.location.reload();
+
+}, 2500);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <div className="profile">
       <NavBar />
@@ -118,21 +172,9 @@ const Profile = () => {
       <div className="profileContainer">
         <div className="uInfo">
           <div className="left">
-            <a href="http://facebook.com">
-              <FacebookTwoToneIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <InstagramIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <TwitterIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <LinkedInIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <PinterestIcon fontSize="large" />
-            </a>
+            <p>From:{userInfo.country}</p>
+            <p>Date of Birth:{moment(userInfo.dateOfBirth).year()}</p>
+            <p>Gender:{userInfo.gender}</p>
           </div>
           <div className="center">
             <span>
@@ -141,31 +183,69 @@ const Profile = () => {
             <div className="info">
               <div className="item">
                 <PlaceIcon />
-                <span>USA</span>
+                <span>{userInfo.country}</span>
               </div>
               <div className="item">
                 <LanguageIcon />
-                <span>username</span>
+                <span>mohammad.com</span>
               </div>
             </div>
-            {/* {test && test.includes(userInfo._id) ? (
-              <button>remove</button>
-            ) : (
-              <button>add</button>
-            )} */}
-            {userId !== currntUser._id ? (
+
+            {/* {userId !== currntUser.userId ? (
               isFriend ? (
                 <button>Remove Friend</button>
               ) : (
-                <button>Add Friend</button>
+                <button onClick={()=>handleSendFriendRequest(userInfo._id)}>Add Friend</button>
               )
             ) : (
-              <button>Edit Profile</button>
-            )}
+              <button onClick={openEdit}>Edit Profile</button>
+            )} */}
+            {userId !== currntUser.userId ? (
+            isFriend ? (
+              <button>Remove Friend</button>
+            ) : (
+              userInfo && userInfo.friendsRequestReceived && userInfo.friendsRequestReceived.some(
+                (req) => req.name === currntUser.userId
+              ) ? (
+                <button onClick={() => handleCancelFriendRequest(userInfo._id)}>
+                  Cancel Request
+                </button>
+              ) : (
+                <button onClick={() => handleSendFriendRequest(userInfo._id)}>
+                  Add Friend
+                </button>
+              )
+            )
+          ) : (
+            <button onClick={openEdit}>Edit Profile</button>
+          )}
+            {isEditOpen && (
+        <EditProfile
+          userInfo={userInfo} 
+          closeModal={closeEdit} 
+        />
+      )}
           </div>
           <div className="right">
-            <EmailOutlinedIcon />
-            <MoreVertIcon />
+            <div className="item-friend">
+              <span> Friends</span>
+
+              {userInfo&&userInfo.friends&&userInfo.friends.map((e) => {
+                return (
+                  <div className="user" key={e._id}>
+                    <div className="userInfo">
+                      <>
+                        <img src={e.profilePicture} alt="" />
+                        <div className="online" />
+                        <span>
+                          {e.firstName} {e.lastName}
+                        </span>
+                      </>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
         {post &&

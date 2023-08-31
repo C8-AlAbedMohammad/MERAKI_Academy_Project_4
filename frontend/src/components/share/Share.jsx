@@ -9,25 +9,25 @@ import FileBase64 from "react-file-base64";
 
 const Share = () => {
   const [post, setPost] = useState({});
-  const [img, setImg] = useState({});
+  const [img, setImg] = useState(null);
   const [imgUrl, setImgUrl] = useState();
 
   const [message, setMessage] = useState();
 
   const { token, getPost, setGetPost, userInfo, setUserInfo, currntUser } =
     useContext(LoginContext);
-    useEffect(() => {
-      if (imgUrl) {
-        handleCreatPost();
-      }
-    }, [imgUrl]);
-  
-  const handleCreatPost = () => {
+  // useEffect(() => {
+  //   if (imgUrl) {
+  //     handleCreatPost();
+  //   }
+  // }, [imgUrl]);
+
+  const handleCreatPost = (url) => {
     const newPost = {
       ...post,
-      image: imgUrl,
+      image: url || "",
     };
-    console.log('newPost:', newPost); 
+    console.log("newPost", newPost);
     axios
       .post("http://localhost:5000/post/", newPost, {
         headers: {
@@ -39,7 +39,7 @@ const Share = () => {
         // setGetPost((pre)=>{return [...pre,...res.data.post]})
         const a = res.data.post;
         setGetPost((pre) => [...pre, a]);
-        const sortedPosts = res.data.posts.sort((a, b) =>
+        const sortedPosts = res.data.post.sort((a, b) =>
           b.createdAt.localeCompare(a.createdAt)
         );
         setGetPost(sortedPosts);
@@ -51,28 +51,32 @@ const Share = () => {
   const handleClereInput = () => {
     setMessage("");
   };
-  const uploadImage = () => {
-    const data = new FormData();
-    data.append("file", img);
-    data.append("upload_preset", "mohammad");
-    data.append("cloud_name", "dca6u433p");
-    fetch("  https://api.cloudinary.com/v1_1/dca6u433p/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log(data);
-        console.log(img);
-        setImgUrl(data.url);
-        console.log('imgUrl:', imgUrl);
+  const uploadImage = async () => {
+    try {
+      const data = new FormData();
+      data.append("file", img);
+      data.append("upload_preset", "mohammad");
+      data.append("cloud_name", "dca6u433p");
 
-        // setTimeout(() => {
-        //   handleCreatPost();
-        // }, 2000);
-        
-      })
-      .catch((err) => console.log(err));
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dca6u433p/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setImgUrl(data.url);
+        console.log(data);
+        handleCreatPost(data.url);
+      } else {
+        console.log(" upload failed.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -88,7 +92,7 @@ const Share = () => {
               setPost({ ...post, description: e.target.value });
             }}
           />
-          <img src={imgUrl}/>
+          <img className="imgPost" src={imgUrl} />
         </div>
         <hr />
         <div className="bottom">
@@ -101,8 +105,6 @@ const Share = () => {
                 setImg(e.target.files[0]);
               }}
             />
-            
-            {/* <FileBase64 multiple={false} onDone={({base64})=>{ setPost({ ...post, image: base64 });}} style={{ display: "none"  }} className="fileInput"/> */}
 
             <label htmlFor="file">
               <div className="item">
@@ -122,8 +124,11 @@ const Share = () => {
           <div className="right">
             <button
               onClick={() => {
-                uploadImage();
-                handleClereInput();
+                if (img) {
+                  uploadImage();
+                } else {
+                  handleCreatPost();
+                }
               }}
             >
               Share

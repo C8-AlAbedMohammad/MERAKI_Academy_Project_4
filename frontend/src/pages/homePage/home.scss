@@ -14,6 +14,11 @@ width: 100%;
         padding: 20px 70px;
         background-color: themed("bgSoft");
     flex: 6;
+    @include mobile{
+        padding: 20px 5px 20px 10px;
+        flex: 5;
+
+      }
     }
 }
 }
