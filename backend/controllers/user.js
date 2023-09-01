@@ -1,6 +1,13 @@
 const usersModel = require("../models/UserSchema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+
+const createToken = (_id) => {
+  const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
+  return jwt.sign({ _id }, jwtSecretKey, { expiresIn: "3d" });
+};
 
 // This function creates a  (new user)
 const register = (req, res) => {
@@ -15,6 +22,7 @@ const register = (req, res) => {
     password,
     friendsRequestReceived,
   } = req.body;
+
   const user = new usersModel({
     firstName,
     lastName,
@@ -25,11 +33,14 @@ const register = (req, res) => {
     email,
     password,
     role: "64e271bbc93475c36974e07b",
-    profilePicture:"https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1693061596~exp=1693062196~hmac=c1d28bc37c653cf9ef38b5675d75a95824d7f961127f33e41d4815024b13e1a7",
-    coverPicture:"https://img.freepik.com/free-photo/black-white-shot-forest-during-foggy-weather_181624-16669.jpg?w=1380&t=st=1693061757~exp=1693062357~hmac=a7efd4d09a0751b98eee5356f47142a5c738cdbf8e38abecfcbc1bffed95a35d",
+    profilePicture:
+      "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1693061596~exp=1693062196~hmac=c1d28bc37c653cf9ef38b5675d75a95824d7f961127f33e41d4815024b13e1a7",
+    coverPicture:
+      "https://img.freepik.com/free-photo/black-white-shot-forest-during-foggy-weather_181624-16669.jpg?w=1380&t=st=1693061757~exp=1693062357~hmac=a7efd4d09a0751b98eee5356f47142a5c738cdbf8e38abecfcbc1bffed95a35d",
     friends: [],
     friendsRequestReceived,
     friendsRequestSent: [],
+    emailToken: crypto.randomBytes(64).toString("hex"),
   });
 
   user
@@ -67,7 +78,8 @@ const login = (req, res) => {
 
   usersModel
     .findOne({ $or: [{ email }, { username }] })
-    .populate("role").populate("friends")
+    .populate("role")
+    .populate("friends")
     .then(async (result) => {
       console.log(result);
       if (!result) {
@@ -98,13 +110,14 @@ const login = (req, res) => {
           success: true,
           message: `Valid login credentials`,
           token: token,
-          userInfo: { userId:result._id,
-          firstName:result.firstName,
-          lastName:result.lastName,
-          profilePicture:result.profilePicture,
-          friends:result.friends
-          }}
-         );
+          currntUser: {
+            _id: result._id,
+            firstName: result.firstName,
+            lastName: result.lastName,
+            profilePicture: result.profilePicture,
+            friends: result.friends,
+          },
+        });
       } catch (error) {
         throw new Error(error);
       }
@@ -172,19 +185,15 @@ const upDateUser = async (req, res) => {
     });
 };
 // update password
-const upDatepassword= async (req, res) => {
+const upDatepassword = async (req, res) => {
   const { id } = req.params;
-  let {
-    password
-  } = req.body;
+  let { password } = req.body;
   password = await bcrypt.hash(password, 10);
   usersModel
     .findByIdAndUpdate(
       { _id: id },
       {
-       
         password,
-     
       },
       { new: true }
     )
@@ -267,31 +276,42 @@ const getUserById = (req, res) => {
 // send friend request
 
 const sendFriendRequest = async (req, res) => {
-    console.log(req.token);
+  console.log(req.token);
   try {
     const { receiverId } = req.params;
-    const senderId  = req.token.userId;
+    const senderId = req.token.userId;
     console.log(req.token);
 
     const sender = await usersModel.findById(senderId);
     const receiver = await usersModel.findById(receiverId);
-    console.log("sender: ",sender?._id,"rece: ",receiver?._id);
+    console.log("sender: ", sender?._id, "rece: ", receiver?._id);
     if (!sender || !receiver) {
       return res
         .status(404)
         .json({ success: false, message: "User Not Found" });
     }
-    const sentRequestIndex =  sender.friendsRequestSent.findIndex(req => req.name.equals(receiverId))
-    const receivedRequestIndex = receiver.friendsRequestReceived.findIndex(req => req.name.equals(senderId))
-      if (
-          !sentRequestIndex ||
-          !receivedRequestIndex)
-      {
-          return res.status(400).json({ success: false, message: "Friend request not found " });
-      }
-    await Promise.all([ usersModel.updateOne({_id:senderId},{$push:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$push:{friendsRequestReceived:{name:senderId}}})])
+    const sentRequestIndex = sender.friendsRequestSent.findIndex((req) =>
+      req.name.equals(receiverId)
+    );
+    const receivedRequestIndex = receiver.friendsRequestReceived.findIndex(
+      (req) => req.name.equals(senderId)
+    );
+    if (!sentRequestIndex || !receivedRequestIndex) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Friend request not found " });
+    }
+    await Promise.all([
+      usersModel.updateOne(
+        { _id: senderId },
+        { $push: { friendsRequestSent: { name: receiverId } } }
+      ),
+      usersModel.updateOne(
+        { _id: receiverId },
+        { $push: { friendsRequestReceived: { name: senderId } } }
+      ),
+    ]);
 
- 
     // !-------------------------------------------
     res
       .status(200)
@@ -304,69 +324,77 @@ const sendFriendRequest = async (req, res) => {
   }
 };
 
-const getFrindRequest=(req,res)=>{
-  const userId=req.token.userId;
+const getFrindRequest = (req, res) => {
+  const userId = req.token.userId;
   usersModel
-  .find({_id:userId},"friendsRequestReceived")
-  .populate("friendsRequestReceived").populate(
-    {
-      path:"friendsRequestReceived",
-      populate:{
-        path:"name",
+    .find({ _id: userId }, "friendsRequestReceived")
+    .populate("friendsRequestReceived")
+    .populate({
+      path: "friendsRequestReceived",
+      populate: {
+        path: "name",
         select: "firstName lastName profilePicture",
-
+      },
+    })
+    .exec()
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `No Friend Request `,
+        });
       }
-
-    }
-  )
-  .exec()
-  .then((result) => {
-    if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: `No Friend Request `,
+      res.status(200).json({
+        success: true,
+        message: `The friend  `,
+        result: result,
       });
-    }
-    res.status(200).json({
-      success: true,
-      message: `The friend  `,
-      result: result,
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
     });
-  })
-  .catch((err) => {
-    res.status(500).json({
-      success: false,
-      message: `Server Error`,
-      err: err.message,
-    });
-  });
-}
+};
 // !---- cancel Friend Request ----
-const cancelFriendRequest  = async (req, res) => {
+const cancelFriendRequest = async (req, res) => {
   try {
     const { receiverId } = req.params;
-    const senderId  = req.token.userId;
+    const senderId = req.token.userId;
     console.log(req.token);
 
     const sender = await usersModel.findById(senderId);
     const receiver = await usersModel.findById(receiverId);
-    console.log("sender: ",sender?._id,"rece: ",receiver?._id);
+    console.log("sender: ", sender?._id, "rece: ", receiver?._id);
     if (!sender || !receiver) {
       return res
         .status(404)
         .json({ success: false, message: "User Not Found" });
     }
-  const sentRequestIndex =  sender.friendsRequestSent.findIndex(req => req.name.equals(receiverId))
-  const receivedRequestIndex = receiver.friendsRequestReceived.findIndex(req => req.name.equals(senderId))
-    if (
-        sentRequestIndex===-1 ||
-        receivedRequestIndex===-1)
-    {
-        return res.status(400).json({ success: false, message: "Friend request not found " });
+    const sentRequestIndex = sender.friendsRequestSent.findIndex((req) =>
+      req.name.equals(receiverId)
+    );
+    const receivedRequestIndex = receiver.friendsRequestReceived.findIndex(
+      (req) => req.name.equals(senderId)
+    );
+    if (sentRequestIndex === -1 || receivedRequestIndex === -1) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Friend request not found " });
     }
-    await Promise.all([ usersModel.updateOne({_id:senderId},{$pull:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$pull:{friendsRequestReceived:{name:senderId}}})])
+    await Promise.all([
+      usersModel.updateOne(
+        { _id: senderId },
+        { $pull: { friendsRequestSent: { name: receiverId } } }
+      ),
+      usersModel.updateOne(
+        { _id: receiverId },
+        { $pull: { friendsRequestReceived: { name: senderId } } }
+      ),
+    ]);
 
- 
     // !-------------------------------------------
     res
       .status(200)
@@ -377,62 +405,104 @@ const cancelFriendRequest  = async (req, res) => {
       .status(400)
       .json({ message: "Failed to cancel friend request.", error: error });
   }
-}
+};
 
 // !---- Accept Friend Request ----
-const acceptFriendRequest= async (req, res) => {
- 
-try {
-    const receiverId = req.token.userId; 
-    const {senderId} = req.params;
-     console.log("receiverId",receiverId,"{senderId}",senderId);
+const acceptFriendRequest = async (req, res) => {
+  try {
+    const receiverId = req.token.userId;
+    const { senderId } = req.params;
+    console.log("receiverId", receiverId, "{senderId}", senderId);
     const receiver = await usersModel.findById(receiverId);
     const sender = await usersModel.findById(senderId);
 
-    const requestIndex = receiver.friends.findIndex(req => req.equals(senderId));
-console.log(requestIndex);
-    if (!requestIndex===-1 ) {
-        return res.status(400).json({ success: false, message: " Friend request not found" });
+    const requestIndex = receiver.friends.findIndex((req) =>
+      req.equals(senderId)
+    );
+    console.log(requestIndex);
+    if (!requestIndex === -1) {
+      return res
+        .status(400)
+        .json({ success: false, message: " Friend request not found" });
     }
 
-    if (!receiver.friends.includes(senderId) && !sender.friends.includes(receiverId)) {
-    await Promise.all([ usersModel.updateOne({_id:senderId},{$push:{friends:receiverId}}),  usersModel.updateOne({_id:receiverId},{$push:{friends:senderId}}),usersModel.updateOne({_id:senderId},{$pull:{friendsRequestSent:{name:receiverId}}}),  usersModel.updateOne({_id:receiverId},{$pull:{friendsRequestReceived:{name:senderId}}})])
-    }else{
-        return res.status(400).json({ success: false, message: " you are Friends " });
- 
+    if (
+      !receiver.friends.includes(senderId) &&
+      !sender.friends.includes(receiverId)
+    ) {
+      await Promise.all([
+        usersModel.updateOne(
+          { _id: senderId },
+          { $push: { friends: receiverId } }
+        ),
+        usersModel.updateOne(
+          { _id: receiverId },
+          { $push: { friends: senderId } }
+        ),
+        usersModel.updateOne(
+          { _id: senderId },
+          { $pull: { friendsRequestSent: { name: receiverId } } }
+        ),
+        usersModel.updateOne(
+          { _id: receiverId },
+          { $pull: { friendsRequestReceived: { name: senderId } } }
+        ),
+      ]);
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: " you are Friends " });
     }
     res
-    .status(200)
-    .json({ success: true, message: "Friend request accepted ." });
-  
-} catch (error) {
+      .status(200)
+      .json({ success: true, message: "Friend request accepted ." });
+  } catch (error) {
     console.log(error);
     res
       .status(400)
       .json({ message: "Failed to accept friend request.", error: error });
-}
-}
-// !serch for user 
+  }
+};
+// !serch for user
 
-const secrhUser=async (req,res)=>{
+const secrhUser = async (req, res) => {
   const searchQuery = req.query.q;
   try {
-    const regex = new RegExp(searchQuery)
+    const regex = new RegExp(searchQuery);
     const users = await usersModel.find({
-      $or: [
-        { firstName: regex },
-        { lastName: regex }
-      ]
+      $or: [{ firstName: regex }, { lastName: regex }],
     });
     res
-    .status(200)
-    .json({ success: true, message: "search for friend .", users:users});
+      .status(200)
+      .json({ success: true, message: "search for friend .", users: users });
   } catch (error) {
-    res.status(500).json({ message: 'Failed  request searching for users.' });
+    res.status(500).json({ message: "Failed  request searching for users." });
   }
-}
+};
 
+const verifyEmail = async (req, res) => {
+try {
+  const emailToken = re.body.emailToken;
+  if (!emailToken) return res.status(404).json("EmailToken not found...");
+  const user = await usersModel.findOne({ emailToken });
 
+  if (user) {
+    user.emailToken = null;
+    user.isVerified = true;
+    await user.save();
+    const newToken = createToken(user._id);
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      newToken,
+      isVerified: user?.isVerified,
+    });
+  } else res.status(404).json("Email verification failed, invalid token!");
+} catch (error) {
+  console.log(error);
+  res.status(500).json(error.message);
+}}
 
 module.exports = {
   register,
@@ -442,5 +512,7 @@ module.exports = {
   getUserById,
   sendFriendRequest,
   cancelFriendRequest,
-  acceptFriendRequest,getFrindRequest,secrhUser
+  acceptFriendRequest,
+  getFrindRequest,
+  secrhUser,verifyEmail
 };

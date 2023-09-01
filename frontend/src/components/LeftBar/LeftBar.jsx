@@ -1,17 +1,14 @@
 import "./leftBar.scss";
-import Friends from "../../assets/1.png";
-import Groups from "../../assets/2.png";
-import Market from "../../assets/3.png";
-import Watch from "../../assets/4.png";
+import Friends from "../../assets/friends.png";
+import Groups from "../../assets/diversity.png";
+import Market from "../../assets/store.png";
+import Watch from "../../assets/cinema.png";
 import Memories from "../../assets/5.png";
-import Events from "../../assets/6.png";
-import Gaming from "../../assets/7.png";
-import Gallery from "../../assets/8.png";
-import Videos from "../../assets/9.png";
-import Messages from "../../assets/10.png";
-import Tutorials from "../../assets/11.png";
-import Courses from "../../assets/12.png";
-import Fund from "../../assets/13.png";
+import Events from "../../assets/calendar.png";
+import Gaming from "../../assets/game-console.png";
+import Gallery from "../../assets/gallery.png";
+import Videos from "../../assets/video-chat.png";
+import Messages from "../../assets/message.png";
 import { useContext } from "react";
 import { LoginContext } from "../../App";
 import { Link } from "react-router-dom";
@@ -29,7 +26,7 @@ const LeftBar = () => {
             src={currntUser.profilePicture}
               alt=""
             />
-            <Link to={`/profile/${currntUser.userId}`} >
+            <Link to={`/profile/${currntUser._id}`}className="linkSpan" >
             <span>{currntUser.firstName} {currntUser.lastName} </span>
             </Link>
           </div>
@@ -49,25 +46,22 @@ const LeftBar = () => {
             <img src={Watch} alt="" />
             <span>Watch</span>
           </div>
-          <div className="item">
-            <img src={Memories} alt="" />
-            <span>Memories</span>
-          </div>
+         
         </div>
         <hr />
         <div className="menu">
           <span>Your shortcuts</span>
           <div className="item">
             <img src={Events} alt="" />
-            <span>Events</span>
+            <span>Events Comming</span>
           </div>
           <div className="item">
             <img src={Gaming} alt="" />
-            <span>Gaming</span>
+            <span>Gaming community</span>
           </div>
           <div className="item">
             <img src={Gallery} alt="" />
-            <span>Gallery</span>
+            <span>My Album</span>
           </div>
           <div className="item">
             <img src={Videos} alt="" />
@@ -79,21 +73,7 @@ const LeftBar = () => {
           </div>
         </div>
         <hr />
-        <div className="menu">
-          <span>Others</span>
-          <div className="item">
-            <img src={Fund} alt="" />
-            <span>Fundraiser</span>
-          </div>
-          <div className="item">
-            <img src={Tutorials} alt="" />
-            <span>Tutorials</span>
-          </div>
-          <div className="item">
-            <img src={Courses} alt="" />
-            <span>Courses</span>
-          </div>
-        </div>
+
       </div>
     </div>
   );

@@ -3,7 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
 import { LoginContext } from "../../App";
 import axios from "axios";
-
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBInput
+}
+from 'mdb-react-ui-kit';
 const Login = () => {
   const { token, setToken, isLoggedIn, setIsLoggedIn, currntUser, setCurrntUser ,userInfoLogin,setUserInfoLoging} =
     useContext(LoginContext);
@@ -23,7 +30,7 @@ const Login = () => {
         console.log(res.data);
         console.log(res.data.token);
         setToken(res.data.token);
-        setCurrntUser(res.data.userInfo)
+        setCurrntUser(res.data.currntUser)
         setUserInfoLoging(res.data.firstName,)
        
         setTimeout(() => {
@@ -31,8 +38,8 @@ const Login = () => {
         }, 2000);
       })
       .catch((err) => {
-        console.log(err);
-        setErrorMessage(err.response);
+        console.log(err.response.data.message);
+        setErrorMessage(err.response.data.message);
       });
   };
 
@@ -40,14 +47,14 @@ const Login = () => {
     if (token) {
       setIsLoggedIn(true);
       localStorage.setItem("token", token);
-      localStorage.setItem("userInfo",JSON.stringify(currntUser))
+      localStorage.setItem("currntUser",JSON.stringify(currntUser))
       setTimeout(() => {
         navigate("/")
      }, 2000);
     } else {
       setIsLoggedIn(false);
       localStorage.removeItem("token");
-      localStorage.removeItem("userId",currntUser)
+      localStorage.removeItem("currntUser",currntUser)
 
     }
   }, [token]);
@@ -93,6 +100,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+  
   );
 };
 

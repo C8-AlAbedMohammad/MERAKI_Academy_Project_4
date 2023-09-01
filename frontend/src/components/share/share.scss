@@ -28,10 +28,11 @@
           border-radius: 50%;
           object-fit: cover;
         }
-        .imgPost {
-          width: 40px;
-          height: 40px;
+        img.imgPost {
+          width: 80px;
+          height: 100px;
           object-fit: cover;
+          border-radius: 0;
         }
 
         input {
@@ -45,6 +46,7 @@
             font-size: 12px;
           }
         }
+    
       }
 
       hr {

@@ -140,7 +140,7 @@ const Feeds = () => {
                       </span>
                     </div>
                   </div>
-                  {post.username._id === currntUser.userId && (
+                  {post.username._id === currntUser._id && (
                     <Dropdown>
                       <Dropdown.Toggle
                         variant="success"
@@ -170,7 +170,7 @@ const Feeds = () => {
                       setGetPostId(post._id);
                     }}
                   >
-                    {post.likes.includes(currntUser.userId) ? (
+                    {post.likes.includes(currntUser._id) ? (
                       <FavoriteOutlinedIcon />
                     ) : (
                       <FavoriteBorderOutlinedIcon color="red" />

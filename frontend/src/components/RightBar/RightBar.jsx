@@ -85,7 +85,7 @@ const RightBar = () => {
         <div className="item">
           <span>Online Friends</span>
 
-          {currntUser.friends.map((e) => {
+          {currntUser&&currntUser.friends&&currntUser.friends.map((e) => {
             return (
               <div className="user" key={e._id}>
                 <div className="userInfo">

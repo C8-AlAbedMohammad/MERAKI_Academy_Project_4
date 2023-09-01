@@ -62,7 +62,7 @@ const NavBar = () => {
     <div className="topBar">
       <div className="left">
         <Link to="/">
-          <span className="logo">Logo Here</span>
+          <span className="logo">Bow Social</span>
         </Link>
       </div>
       <div className="center">
@@ -78,14 +78,14 @@ const NavBar = () => {
           <ul>
             {matchingUsers.map((user) => (
               <Link to={`/profile/${user._id}`}>
-                {" "}
+             
                 <li key={user._id}>
-                  {" "}
+                 
                   <img
                     src={user.profilePicture}
                     alt=""
                     className="userProfilePicture"
-                  />{" "}
+                  />
                   {user.firstName} {user.lastName}
                 </li>
               </Link>
@@ -138,7 +138,7 @@ const NavBar = () => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu align="right">
-              <Dropdown.Item as={Link} to={`/profile/${currntUser.userId}`}>
+              <Dropdown.Item as={Link} to={`/profile/${currntUser._id}`}>
                 Profile
               </Dropdown.Item>
               <Dropdown.Item onClick={logOut} >

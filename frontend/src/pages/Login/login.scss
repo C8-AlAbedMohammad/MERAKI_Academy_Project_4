@@ -1,4 +1,6 @@
+@import "../../App.scss";
 .login {
+    @include themify($themes) {
     height: 100vh;
     background-color: rgb(193, 190, 241);
     display: flex;
@@ -14,6 +16,9 @@
         max-height: 600px;
         box-shadow: 5px 5px 15px 15px rgb(181, 154, 212);
 flex-direction: row;
+@include mobile{
+ width: 100%;
+ }
         .liftSide {
             flex: 1;
             background-image: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)), url("https://images.pexels.com/photos/4881606/pexels-photo-4881606.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
@@ -24,6 +29,10 @@ flex-direction: row;
             padding: 25px;
             gap: 15px;
             border-radius: 10px;
+            @include mobile{
+               display: none;
+            width: 100%;
+            }
 
             h1 {
                 font-size: 50px;
@@ -91,3 +100,6 @@ flex-direction: row;
         }
     }
 }
+
+}
+

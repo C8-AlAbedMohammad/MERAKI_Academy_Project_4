@@ -200,12 +200,12 @@ setTimeout(() => {
             ) : (
               <button onClick={openEdit}>Edit Profile</button>
             )} */}
-            {userId !== currntUser.userId ? (
+            {userId !== currntUser._id ? (
             isFriend ? (
               <button>Remove Friend</button>
             ) : (
               userInfo && userInfo.friendsRequestReceived && userInfo.friendsRequestReceived.some(
-                (req) => req.name === currntUser.userId
+                (req) => req.name === currntUser._id
               ) ? (
                 <button onClick={() => handleCancelFriendRequest(userInfo._id)}>
                   Cancel Request
@@ -270,7 +270,7 @@ setTimeout(() => {
                         </span>
                       </div>
                     </div>
-                    {post.username._id === currntUser.userId && (
+                    {post.username._id === currntUser._id && (
                       <Dropdown>
                         <Dropdown.Toggle
                           variant="success"
@@ -302,7 +302,7 @@ setTimeout(() => {
                         setGetPostId(post._id);
                       }}
                     >
-                      {post.likes.includes(currntUser.userId) ? (
+                      {post.likes.includes(currntUser._id) ? (
                         <FavoriteOutlinedIcon />
                       ) : (
                         <FavoriteBorderOutlinedIcon />

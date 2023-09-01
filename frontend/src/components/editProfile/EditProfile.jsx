@@ -25,6 +25,8 @@ const EditProfile = ({ userInfo, closeModal }) => {
       .then((res) => {
         console.log(res.data);
         closeModal();
+        localStorage.setItem("currntUser",JSON.stringify(newUpdatedInfo))
+
       })
       .catch((err) => {
         console.error(err);
@@ -51,6 +53,7 @@ const EditProfile = ({ userInfo, closeModal }) => {
 
         setUpdatedInfo({ ...updatedInfo, profilePicture: data.url });
         handleSaveChanges(data.url);
+
       } else {
         console.log(" upload failed.");
       }

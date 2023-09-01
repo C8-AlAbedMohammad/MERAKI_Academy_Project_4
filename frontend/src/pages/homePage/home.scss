@@ -3,8 +3,10 @@
 .homePage {
     display: flex;
 width: 100%;
+
 @include themify($themes) {
-  
+
+
     background-color: themed("bg");
     color: themed("textColor");
     &::-webkit-scrollbar {
@@ -13,6 +15,8 @@ width: 100%;
       .feedsBox{
         padding: 20px 70px;
         background-color: themed("bgSoft");
+        // height: calc(100vh - 50px);
+
     flex: 6;
     @include mobile{
         padding: 20px 5px 20px 10px;

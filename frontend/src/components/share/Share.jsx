@@ -43,6 +43,7 @@ const Share = () => {
           b.createdAt.localeCompare(a.createdAt)
         );
         setGetPost(sortedPosts);
+        handleClereInput()
       })
       .catch((err) => {
         console.log(err);
@@ -71,6 +72,7 @@ const Share = () => {
         setImgUrl(data.url);
         console.log(data);
         handleCreatPost(data.url);
+        handleClereInput()
       } else {
         console.log(" upload failed.");
       }

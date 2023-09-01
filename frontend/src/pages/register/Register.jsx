@@ -22,7 +22,7 @@ const Register = () => {
       .post("http://localhost:5000/users/register", user)
       .then((res) => {
         console.log(res.data.message);
-        setMessage(res.data.message);
+        setMessage("Registration successful. Please check your email for verification instructions.");
         setshowMessage(true);
         setErrMessage("");
         navigate("/login");
@@ -30,8 +30,9 @@ const Register = () => {
       })
       .catch((err) => {
         console.log(err);
+
         setshowMessage(false);
-        if (err.response.data) {
+        if (err.response) {
           setErrMessage(err.response.data.message);
         } 
         if (age < 18) {
