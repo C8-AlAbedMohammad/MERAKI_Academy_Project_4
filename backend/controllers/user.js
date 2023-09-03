@@ -2,6 +2,8 @@ const usersModel = require("../models/UserSchema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const { log } = require("console");
 
 const createToken = (_id) => {
   const jwtSecretKey = process.env.JWT_SECRET_KEY;
@@ -45,11 +47,31 @@ const register = (req, res) => {
 
   user
     .save()
-    .then((result) => {
+    .then(async(result) => {
+      const emailToken = user.emailToken; 
+      const verificationLink = `http://localhost:3000/verify-email/${emailToken}`;
+        const transporter = nodemailer.createTransport({
+        service:"gmail",
+        auth:{
+           user:process.env.APP_EMAIL,
+     pass:process.env.APP_PASS,
+        }
+    
+      });
+
+      await transporter.sendMail({
+        from: process.env.APP_EMAIL,
+        to: user.email,
+        subject: "Email Verification",
+        html: `<p>Please click the following link to verify your email: <a href="${verificationLink}">${verificationLink}</a></p>`,
+      });
+
       res.status(201).json({
         success: true,
         message: `Account Created Successfully`,
         author: result,
+        emailToken: emailToken,
+
       });
     })
     .catch((err) => {
@@ -81,27 +103,32 @@ const login = (req, res) => {
     .populate("role")
     .populate("friends")
     .then(async (result) => {
-      console.log(result);
+      console.log("result",result);
       if (!result) {
         return res.status(403).json({
           success: false,
           message: `The email doesn't exist or The password you’ve entered is incorrect`,
         });
       }
+      if (!result.isVerified) {
+        return res.status(403).json({
+          success: false,
+          message: `You must verify your email before logging in.`,
+        });
+      }
       try {
         const valid = await bcrypt.compare(password, result.password);
-        if (!valid) {
-          return res.status(403).json({
-            success: false,
-            message: ` The password you’ve entered is incorrect`,
-          });
-        }
+        // if (!valid) {
+        //   return res.status(403).json({
+        //     success: false,
+        //     message: ` The password you’ve entered is incorrect`,
+        //   });
+        // }
         const payload = {
           userId: result._id,
           username: result.username,
           role: result.role,
         };
-        console.log(payload);
         const options = {
           expiresIn: "3d",
         };
@@ -482,14 +509,21 @@ const secrhUser = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
 try {
-  const emailToken = re.body.emailToken;
+  console.log("Inside verifyEmail"); 
+
+  const emailToken = req.params.emailToken;
+  console.log('Email Token:', emailToken);
+
   if (!emailToken) return res.status(404).json("EmailToken not found...");
   const user = await usersModel.findOne({ emailToken });
 
   if (user) {
+    // console.log('Found user:', user);
+
     user.emailToken = null;
     user.isVerified = true;
     await user.save();
+    console.log(user);
     const newToken = createToken(user._id);
     res.status(200).json({
       _id: user._id,

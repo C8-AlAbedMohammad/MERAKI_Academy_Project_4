@@ -6,6 +6,7 @@ import Home from "./pages/homePage/Home";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import React, { useState, createContext, useEffect } from "react";
 import Profile from './components/profile/Profile';
+import VerifyEmail from './pages/verifyEmail/VerifyEmail';
 export const LoginContext = createContext();
 function App() {
   const [getPost, setGetPost] = useState([]);
@@ -20,6 +21,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(
     JSON.parse(localStorage.getItem("darkMode")) || false
   );
+  const navigate = useNavigate();
 
   const toggle = () => {
     setDarkMode(!darkMode);
@@ -28,7 +30,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
-  // if (!isLoggedIn) {
+  // if (!token) {
   //   navigate("/register");
   // }
 
@@ -42,6 +44,7 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path={`/profile/:userId`} element={<Profile />} />
+          <Route path="/verify-email/:token" element={<VerifyEmail/>} />
 
           <Route path="/register" element={<Register />} />
         </Routes>

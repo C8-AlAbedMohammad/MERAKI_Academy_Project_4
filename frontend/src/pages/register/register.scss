@@ -1,3 +1,4 @@
+@import "../../App.scss";
 .register {
     height: 100vh;
     background-color: rgb(193, 190, 241);
@@ -12,7 +13,10 @@
         max-height: 600px;
         box-shadow: 5px 5px 15px 15px rgb(181, 154, 212);
         flex-direction: row-reverse;
-
+        @include mobile{
+            width: 95%;
+            }
+           
         .liftSide {
             flex: 1;
             background-image: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)), url("https://images.pexels.com/photos/5709523/pexels-photo-5709523.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
@@ -23,7 +27,10 @@
             padding: 25px;
             gap: 15px;
             border-radius: 10px;
-
+            @include mobile{
+                display: none;
+             width: 100%;
+             }
             h1 {
                 font-size: 50px;
             }

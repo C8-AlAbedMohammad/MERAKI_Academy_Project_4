@@ -86,21 +86,21 @@ const EditProfile = ({ userInfo, closeModal }) => {
         value={updatedInfo.username}
         onChange={handleInputChange}
       />
-      <label htmlFor="dateOfBirth">dateOfBirth:</label>
+      <label htmlFor="dateOfBirth">dateOfBirth:</label><br/>
       <input
         type="date"
         name="dateOfBirth"
         value={updatedInfo.dateOfBirth}
         onChange={handleInputChange}
-      />
-      <label htmlFor="country">country:</label>
+      /><br/>
+      <label htmlFor="country">country:</label><br/>
       <input
         type="text"
         name="country"
         value={updatedInfo.country}
         onChange={handleInputChange}
-      />
-      <label htmlFor="email">email:</label>
+      /><br/>
+      <label htmlFor="email">email:</label><br/>
       <input
         type="email"
         name="email"

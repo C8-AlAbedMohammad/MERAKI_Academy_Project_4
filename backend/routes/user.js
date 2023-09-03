@@ -8,6 +8,7 @@ usersRouter.post("/register", register);
 // login
 usersRouter.post("/login", login);
 // update user
+usersRouter.post("/verify-email/:emailToken", verifyEmail);
 usersRouter.put("/update/:id", upDateUser);
 // delete user
 usersRouter.delete("/delete/:id", deleteUserById);
@@ -20,7 +21,6 @@ usersRouter.get("/:id",authentication, getUserById);
 
 // send friend request
 usersRouter.post("/sendrequest/:receiverId",authentication, sendFriendRequest);
-usersRouter.post("/verify-email", verifyEmail);
 
 
 // cancel friend request

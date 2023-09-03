@@ -28,6 +28,11 @@
                 font-weight: bold;
                 color: white;
                 cursor: pointer;
+                .imgLogo{
+                    height: 45px;
+                    width: 140px;
+                    object-fit: cover;
+                }
 
             }
         }

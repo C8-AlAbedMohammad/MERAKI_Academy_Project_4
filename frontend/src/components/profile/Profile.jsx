@@ -119,7 +119,7 @@ const Profile = () => {
 setTimeout(() => {
           window.location.reload();
 
-}, 2500);
+}, 1500);
       })
       .catch((err) => {
         console.error(err);
@@ -141,7 +141,7 @@ setTimeout(() => {
         setTimeout(() => {
           window.location.reload();
 
-}, 2500);
+}, 1500);
       })
       .catch((err) => {
         console.error(err);

@@ -25,7 +25,7 @@ const Register = () => {
         setMessage("Registration successful. Please check your email for verification instructions.");
         setshowMessage(true);
         setErrMessage("");
-        navigate("/login");
+        // navigate("/login");
 
       })
       .catch((err) => {

@@ -8,6 +8,7 @@ import axios from "axios";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import { Dropdown } from "react-bootstrap";
+import Logo from "../../assets/logo.jpg";
 
 const NavBar = () => {
   const {
@@ -62,7 +63,7 @@ const NavBar = () => {
     <div className="topBar">
       <div className="left">
         <Link to="/">
-          <span className="logo">Bow Social</span>
+          <span className="logo"><img src={Logo} className="imgLogo"/></span>
         </Link>
       </div>
       <div className="center">

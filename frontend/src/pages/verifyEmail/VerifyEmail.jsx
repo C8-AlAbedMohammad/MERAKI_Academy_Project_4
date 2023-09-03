@@ -1,32 +1,41 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams, Link } from "react-router-dom";
+import axios from "axios";
+import "./VerifyEmail.scss"; 
 
 const VerifyEmail = () => {
-  const [verificationStatus, setVerificationStatus] = useState('');
+  const location = useLocation();
+  const { token } = useParams();
+  const [showMessage, setShowMessage] = useState(false);
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
 
-  const handleVerifyEmail = async () => {
-    try {
-      // Replace 'your-server-url' with your actual server URL
-      const response = await axios.post('your-server-url/verify-email', {
-        emailToken: 'the-email-token', // Replace with the actual email token
-      });
-
-      if (response.status === 200) {
-        setVerificationStatus('Email verification successful.');
-        // You can perform any additional actions here, like updating your UI.
-      } else {
-        setVerificationStatus('Email verification failed. Invalid token.');
-      }
-    } catch (error) {
-      setVerificationStatus('An error occurred while verifying the email.');
-      console.error(error);
+    if (token) {
+      axios
+        .post(`http://localhost:5000/users/verify-email/${token}`)
+        .then((res) => {
+          console.log(res);
+          setTimeout(() => {
+            setShowMessage(true);
+          }, 2000);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
-  };
+  }, [location.search]);
 
   return (
-    <div>
-      <button onClick={handleVerifyEmail}>Verify Email</button>
-      <p>{verificationStatus}</p>
+    <div className="verify-email-container">
+      <div className="verify-email-content">
+        <h2>Verifying Email...</h2>
+        {showMessage && (
+          <p>Email verified successfully.</p>
+        )}
+      { showMessage&& <Link to="/login">
+          <button className="login-button">Go to Login</button>
+        </Link>}
+      </div>
     </div>
   );
 };

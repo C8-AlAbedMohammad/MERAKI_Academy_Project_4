@@ -27,16 +27,22 @@ const Login = () => {
     axios
       .post("http://localhost:5000/users/login", login)
       .then((res) => {
-        console.log(res.data);
-        console.log(res.data.token);
-        setToken(res.data.token);
-        setCurrntUser(res.data.currntUser)
-        setUserInfoLoging(res.data.firstName,)
-       
-        setTimeout(() => {
-           navigate("/")
-        }, 2000);
+        if (res.data.success) {
+          console.log(res.data);
+          console.log(res.data.token);
+          setToken(res.data.token);
+          setCurrntUser(res.data.currntUser);
+          setUserInfoLoging(res.data.currntUser.firstName);
+  
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
+        } else {
+          console.log(res.data.message); 
+          setErrorMessage(res.data.message);
+        }
       })
+  
       .catch((err) => {
         console.log(err.response.data.message);
         setErrorMessage(err.response.data.message);
@@ -50,12 +56,12 @@ const Login = () => {
       localStorage.setItem("currntUser",JSON.stringify(currntUser))
       setTimeout(() => {
         navigate("/")
-     }, 2000);
+     }, 1500);
     } else {
       setIsLoggedIn(false);
       localStorage.removeItem("token");
       localStorage.removeItem("currntUser",currntUser)
-
+      navigate("/login")
     }
   }, [token]);
 
