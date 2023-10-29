@@ -38,7 +38,7 @@ const NavBar = () => {
     if (searchQuery.trim() !== "") {
       axios
         .get(
-          `http://localhost:5000/users/search?q=${encodeURIComponent(
+          `https://bow-social.onrender.com/users/search?q=${encodeURIComponent(
             searchQuery
           )}`,
           {

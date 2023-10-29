@@ -29,7 +29,7 @@ const Share = () => {
     };
     console.log("newPost", newPost);
     axios
-      .post("http://localhost:5000/post/", newPost, {
+      .post("https://bow-social.onrender.com/post/", newPost, {
         headers: {
           authorization: `Bearer ${token}`,
         },

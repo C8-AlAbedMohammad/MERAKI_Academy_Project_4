@@ -10,7 +10,7 @@ const Comments = ({ Comments, postId, getPostId }) => {
   const { token, getPost, setGetPost, currntUser } = useContext(LoginContext);
   const handleCreateComment = (idPost) => {
     axios
-      .post(`http://localhost:5000/post/comment/${idPost}`, {comment}, {
+      .post(`https://bow-social.onrender.com/post/comment/${idPost}`, {comment}, {
         headers: {
           authorization: `Bearer ${token}`,
         },

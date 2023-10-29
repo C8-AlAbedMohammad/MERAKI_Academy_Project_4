@@ -1,0 +1,10 @@
+[{
+  "_id": {
+    "$oid": "64e271bbc93475c36974e07b"
+  },
+  "role": "admin",
+  "permissions": [
+    "all"
+  ],
+  "__v": 0
+}]

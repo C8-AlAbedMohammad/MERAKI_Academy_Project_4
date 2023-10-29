@@ -19,7 +19,7 @@ const Register = () => {
   
     console.log(user);
     axios
-      .post("http://localhost:5000/users/register", user)
+      .post("https://bow-social.onrender.com/users/register", user)
       .then((res) => {
         console.log(res.data.message);
         setMessage("Registration successful. Please check your email for verification instructions.");

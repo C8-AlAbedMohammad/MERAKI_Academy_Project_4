@@ -25,7 +25,7 @@ const Login = () => {
     e.preventDefault()
 
     axios
-      .post("http://localhost:5000/users/login", login)
+      .post("https://bow-social.onrender.com/users/login", login)
       .then((res) => {
         if (res.data.success) {
           console.log(res.data);

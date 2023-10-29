@@ -1,0 +1,174 @@
+[{
+  "_id": {
+    "$oid": "64f4836f6636f13cd804f2d2"
+  },
+  "firstName": "Mohammad",
+  "lastName": "AlAbed",
+  "username": "mohammad98",
+  "dateOfBirth": {
+    "$date": "1998-04-05T00:00:00.000Z"
+  },
+  "gender": "Male",
+  "email": "mohammad98@gmail.com",
+  "password": "$2a$10$zJgT.DMC.T2LhmPBuOgbWuYY/W3fst9F7wKiw5pcfcnO4V.IqAfUy",
+  "role": {
+    "$oid": "64e271bbc93475c36974e07b"
+  },
+  "profilePicture": "http://res.cloudinary.com/dca6u433p/image/upload/v1693750241/kzmjgd5epbtsstvdlmc6.jpg",
+  "coverPicture": "https://img.freepik.com/free-photo/black-white-shot-forest-during-foggy-weather_181624-16669.jpg?w=1380&t=st=1693061757~exp=1693062357~hmac=a7efd4d09a0751b98eee5356f47142a5c738cdbf8e38abecfcbc1bffed95a35d",
+  "friends": [
+    {
+      "$oid": "64f484f26636f13cd804f300"
+    },
+    {
+      "$oid": "64f487336636f13cd804f35c"
+    },
+    {
+      "$oid": "64f497506636f13cd804f55a"
+    }
+  ],
+  "friendsRequestReceived": [],
+  "friendsRequestSent": [],
+  "isVerified": true,
+  "emailToken": "fe8d62149e99c181207380237a79231acc27a4029bdede7f390090f5c4f0a683a86ea0c7b4a3ea6212a6ae29cd4a10272737dbc10fcfa1c028f941876cc3ba7f",
+  "createdAt": {
+    "$date": "2023-09-03T13:00:31.923Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-03T14:32:44.022Z"
+  },
+  "__v": 0,
+  "country": "Syria"
+},
+{
+  "_id": {
+    "$oid": "64f484f26636f13cd804f300"
+  },
+  "firstName": "Ahmad",
+  "lastName": "AlBOOM",
+  "username": "ahmadboom",
+  "dateOfBirth": {
+    "$date": "2002-02-22T00:00:00.000Z"
+  },
+  "gender": "Male",
+  "email": "ahmad98@gmail.com",
+  "password": "$2a$10$wyJXdS91k8M3uNSa0Ev.qO2gZP5/NAQ50HNMCXa7dNwuoa/W0/GCe",
+  "role": {
+    "$oid": "64e271bbc93475c36974e07b"
+  },
+  "profilePicture": "http://res.cloudinary.com/dca6u433p/image/upload/v1693746593/xowapbi1svhczftm25om.jpg",
+  "coverPicture": "https://img.freepik.com/free-photo/black-white-shot-forest-during-foggy-weather_181624-16669.jpg?w=1380&t=st=1693061757~exp=1693062357~hmac=a7efd4d09a0751b98eee5356f47142a5c738cdbf8e38abecfcbc1bffed95a35d",
+  "friends": [
+    {
+      "$oid": "64f4836f6636f13cd804f2d2"
+    }
+  ],
+  "friendsRequestReceived": [
+    {
+      "name": {
+        "$oid": "64f487336636f13cd804f35c"
+      },
+      "stauts": "pending",
+      "_id": {
+        "$oid": "64f488136636f13cd804f3ce"
+      },
+      "createdAt": {
+        "$date": "2023-09-03T13:20:19.996Z"
+      }
+    }
+  ],
+  "friendsRequestSent": [],
+  "isVerified": true,
+  "emailToken": "eb7db3e1c0a4eb95f8f7c8d6852b7753f4484037c5ae62824e66294fa429c4e581bfeb2770d685b0f92ef987a890f5b1aa8a6fe505a5a64c34e7cc50c3c46f21",
+  "createdAt": {
+    "$date": "2023-09-03T13:06:58.834Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-03T14:08:49.523Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f487336636f13cd804f35c"
+  },
+  "firstName": "Omar",
+  "lastName": "AlOmar",
+  "username": "omar98",
+  "dateOfBirth": {
+    "$date": "2002-02-22T00:00:00.000Z"
+  },
+  "gender": "Male",
+  "email": "omar98@gmail.com",
+  "password": "$2a$10$jIbVnb3HNYM3aL0kgujFwOeZdJquuIa4UdMV5HFhUxQAAHGxrr9Am",
+  "role": {
+    "$oid": "64e271bbc93475c36974e07b"
+  },
+  "profilePicture": "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1693061596~exp=1693062196~hmac=c1d28bc37c653cf9ef38b5675d75a95824d7f961127f33e41d4815024b13e1a7",
+  "coverPicture": "https://img.freepik.com/free-photo/black-white-shot-forest-during-foggy-weather_181624-16669.jpg?w=1380&t=st=1693061757~exp=1693062357~hmac=a7efd4d09a0751b98eee5356f47142a5c738cdbf8e38abecfcbc1bffed95a35d",
+  "friends": [
+    {
+      "$oid": "64f4836f6636f13cd804f2d2"
+    }
+  ],
+  "friendsRequestReceived": [],
+  "friendsRequestSent": [
+    {
+      "name": {
+        "$oid": "64f484f26636f13cd804f300"
+      },
+      "stauts": "pending",
+      "_id": {
+        "$oid": "64f488136636f13cd804f3cc"
+      },
+      "createdAt": {
+        "$date": "2023-09-03T13:20:19.996Z"
+      }
+    }
+  ],
+  "isVerified": true,
+  "emailToken": "60cb6a044f7f27be386ef9038d98c98109734ffafa03991fe9520c1c19db01015369c2281bd3b485a90f76904e847f09fa5e32391af6410b71d8985bb8933556",
+  "createdAt": {
+    "$date": "2023-09-03T13:16:35.187Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-03T14:08:54.730Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f497506636f13cd804f55a"
+  },
+  "firstName": "Ali",
+  "lastName": "Aloosh",
+  "username": "ali98",
+  "dateOfBirth": {
+    "$date": "1999-05-03T00:00:00.000Z"
+  },
+  "gender": "Male",
+  "email": "d63a4de19b@linkinbox.lol",
+  "password": "$2a$10$3e.VrE989jiJVwH3CGb0N.UphrIXwZWcbQavOZeFkrfHuba/6uovK",
+  "role": {
+    "$oid": "64e271bbc93475c36974e07b"
+  },
+  "profilePicture": "http://res.cloudinary.com/dca6u433p/image/upload/v1693751280/oieqy96rlxx4ii63sfjn.jpg",
+  "coverPicture": "https://img.freepik.com/free-photo/black-white-shot-forest-during-foggy-weather_181624-16669.jpg?w=1380&t=st=1693061757~exp=1693062357~hmac=a7efd4d09a0751b98eee5356f47142a5c738cdbf8e38abecfcbc1bffed95a35d",
+  "friends": [
+    {
+      "$oid": "64f4836f6636f13cd804f2d2"
+    }
+  ],
+  "friendsRequestReceived": [],
+  "friendsRequestSent": [],
+  "isVerified": true,
+  "emailToken": null,
+  "createdAt": {
+    "$date": "2023-09-03T14:25:20.564Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-03T14:32:44.022Z"
+  },
+  "__v": 0,
+  "country": "jordan"
+}]

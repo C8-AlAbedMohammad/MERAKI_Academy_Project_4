@@ -21,7 +21,7 @@ const EditProfile = ({ userInfo, closeModal }) => {
     profilePicture:url||""
    }
   await  axios
-      .put(`http://localhost:5000/users/update/${userInfo._id}`, newUpdatedInfo)
+      .put(`https://bow-social.onrender.com/users/update/${userInfo._id}`, newUpdatedInfo)
       .then((res) => {
         console.log(res.data);
         closeModal();

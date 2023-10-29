@@ -6,11 +6,11 @@
     position: sticky;
     top: 50px;
     height: calc(100vh - 50px);
-    overflow: scroll ;
+    overflow: scroll;
     background-color: themed("bg");
     color: themed("textColor");
 
-    @include mobile{
+    @include mobile {
       display: none;
     }
 
@@ -32,14 +32,15 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
-.linkSpan{
-  color: themed("textColor");
 
-    span {
-          font-size: 12px;
+        .linkSpan {
+          color: themed("textColor");
+
+          span {
+            font-size: 12px;
+          }
         }
-}
-      
+
 
         .user {
           display: flex;
@@ -75,3 +76,5 @@
     }
   }
 }
+
+

@@ -13,7 +13,7 @@ const RightBar = () => {
   }, []);
   const handleGetFriendRecived = () => {
     axios
-      .get(`http://localhost:5000/users/getftreq`, {
+      .get(`https://bow-social.onrender.com/users/getftreq`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -30,7 +30,7 @@ const RightBar = () => {
     console.log(senderId);
     axios
       .post(
-        `http://localhost:5000/users/accept-request/${senderId}`,
+        `https://bow-social.onrender.com/users/accept-request/${senderId}`,
         {},
         {
           headers: {

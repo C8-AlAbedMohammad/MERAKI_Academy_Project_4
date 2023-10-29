@@ -49,7 +49,7 @@ const Profile = () => {
   }, []);
   const handleGetCurrntUser = () => {
     axios
-      .get(`http://localhost:5000/users/${userId}`, {
+      .get(`https://bow-social.onrender.com/users/${userId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -71,7 +71,7 @@ const Profile = () => {
   };
   const getUserPost = () => {
     axios
-      .get(`http://localhost:5000/post/timeline/${userId}`, {
+      .get(`https://bow-social.onrender.com/post/timeline/${userId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -87,7 +87,7 @@ const Profile = () => {
   const handleLike = (postId) => {
     axios
       .post(
-        `http://localhost:5000/post/like/${postId}`,
+        `https://bow-social.onrender.com/post/like/${postId}`,
         {},
         {
           headers: {
@@ -106,7 +106,7 @@ const Profile = () => {
   const handleSendFriendRequest = (receiverId) => {
     axios
       .post(
-        `http://localhost:5000/users/sendrequest/${receiverId}`,
+        `https://bow-social.onrender.com/users/sendrequest/${receiverId}`,
         {},
         {
           headers: {
@@ -128,7 +128,7 @@ setTimeout(() => {
   const handleCancelFriendRequest = (receiverId) => {
     axios
       .post(
-        `http://localhost:5000/users/cancelrequest/${receiverId}`,
+        `https://bow-social.onrender.com/users/cancelrequest/${receiverId}`,
         {},
         {
           headers: {

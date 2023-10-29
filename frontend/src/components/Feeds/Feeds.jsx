@@ -27,7 +27,7 @@ const Feeds = () => {
   const [userId, setuserId] = useState("");
   const handleGetPost = () => {
     axios
-      .get("http://localhost:5000/post/timeline/", {
+      .get("https://bow-social.onrender.com/post/timeline/", {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -49,7 +49,7 @@ const Feeds = () => {
   const handleLike = (postId) => {
     axios
       .post(
-        `http://localhost:5000/post/like/${postId}`,
+        `https://bow-social.onrender.com/post/like/${postId}`,
         {},
         {
           headers: {
@@ -76,7 +76,7 @@ const Feeds = () => {
   };
   const handleDeletePost = (id) => {
     axios
-      .delete(`http://localhost:5000/post/${id}`, {
+      .delete(`https://bow-social.onrender.com/post/${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -100,7 +100,7 @@ const Feeds = () => {
   const handleUpdatePost = async (postId, ) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/post/${postId}`,
+        `https://bow-social.onrender.com/post/${postId}`,
         {},
         {
           headers: {

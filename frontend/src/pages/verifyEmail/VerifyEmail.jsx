@@ -12,7 +12,7 @@ const VerifyEmail = () => {
 
     if (token) {
       axios
-        .post(`http://localhost:5000/users/verify-email/${token}`)
+        .post(`https://bow-social.onrender.com/users/verify-email/${token}`)
         .then((res) => {
           console.log(res);
           setTimeout(() => {
