@@ -1,0 +1,378 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.theme-light .topBar {
+  height: 50px;
+  width: 100%;
+  background-color: #5271ff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  padding: 10px 20px;
+  z-index: 999;
+}
+.theme-light .topBar .left {
+  flex: 3;
+}
+@media (max-width: 480px) {
+  .theme-light .topBar .left {
+    display: none;
+  }
+}
+.theme-light .topBar .left .logo {
+  font-size: 25px;
+  margin-left: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+.theme-light .topBar .left .logo .imgLogo {
+  height: 45px;
+  width: 140px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.theme-light .topBar .center {
+  flex: 5;
+}
+.theme-light .topBar .center .searchBar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 30px;
+  width: 100%;
+}
+@media (max-width: 480px) {
+  .theme-light .topBar .center .searchBar {
+    width: 90%;
+  }
+}
+.theme-light .topBar .center .searchBar .searchIcon {
+  font-size: 25px !important;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.theme-light .topBar .center .searchBar .searchInput {
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  width: 70%;
+  padding: 15px;
+  font-size: 20px;
+}
+.theme-light .topBar .center .searchBar .searchInput:focus {
+  outline: none;
+}
+.theme-light .topBar .right {
+  flex: 3;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.theme-light .topBar .right .rightNavBar {
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+.theme-light .topBar .right .rightBarIcon {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  justify-content: space-between;
+  gap: 15px;
+}
+.theme-light .topBar .right .rightBarIcon .icons {
+  cursor: pointer;
+  position: relative;
+}
+.theme-light .topBar .right .rightBarIcon .badge {
+  height: 15px;
+  width: 15px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.theme-light .topBar .right .topBarProfilePic {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  cursor: pointer;
+}
+.theme-light .topBar .right span {
+  color: white;
+}
+@media (max-width: 480px) {
+  .theme-light .topBar .right span {
+    display: none;
+  }
+}
+.theme-light .topBar .right .dropdown {
+  position: relative;
+  display: block;
+}
+.theme-light .topBar .right .dropdown .dropdown-toggle {
+  background-color: transparent;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.theme-light .topBar .right .dropdown .dropdown-toggle .topBarProfilePic {
+  width: 40px;
+  height: 30px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.theme-light .topBar .right .dropdown .dropdown-menu {
+  position: absolute;
+  right: 0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  min-width: 150px;
+}
+.theme-light .topBar .right .dropdown .dropdown-menu .dropdown-item {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.theme-light .topBar .right .dropdown .dropdown-menu .dropdown-item:hover {
+  background-color: #f4f4f4;
+}
+.theme-light .topBar dl,
+.theme-light .topBar ol,
+.theme-light .topBar ul {
+  position: absolute;
+  top: 50px;
+  margin-bottom: 1rem;
+  list-style-type: none;
+}
+.theme-light .topBar dl,
+.theme-light .topBar ol,
+.theme-light .topBar ul li {
+  background-color: white;
+  width: 600px;
+  text-decoration: none;
+  position: relative;
+  top: -9.5px;
+}
+@media (max-width: 480px) {
+  .theme-light .topBar dl,
+  .theme-light .topBar ol,
+  .theme-light .topBar ul li {
+    width: 200px;
+  }
+}
+.theme-light .topBar .userProfilePicture {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.theme-dark .topBar {
+  height: 50px;
+  width: 100%;
+  background-color: #5271ff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  padding: 10px 20px;
+  z-index: 999;
+}
+.theme-dark .topBar .left {
+  flex: 3;
+}
+@media (max-width: 480px) {
+  .theme-dark .topBar .left {
+    display: none;
+  }
+}
+.theme-dark .topBar .left .logo {
+  font-size: 25px;
+  margin-left: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+.theme-dark .topBar .left .logo .imgLogo {
+  height: 45px;
+  width: 140px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.theme-dark .topBar .center {
+  flex: 5;
+}
+.theme-dark .topBar .center .searchBar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 30px;
+  width: 100%;
+}
+@media (max-width: 480px) {
+  .theme-dark .topBar .center .searchBar {
+    width: 90%;
+  }
+}
+.theme-dark .topBar .center .searchBar .searchIcon {
+  font-size: 25px !important;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.theme-dark .topBar .center .searchBar .searchInput {
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  width: 70%;
+  padding: 15px;
+  font-size: 20px;
+}
+.theme-dark .topBar .center .searchBar .searchInput:focus {
+  outline: none;
+}
+.theme-dark .topBar .right {
+  flex: 3;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.theme-dark .topBar .right .rightNavBar {
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+.theme-dark .topBar .right .rightBarIcon {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  justify-content: space-between;
+  gap: 15px;
+}
+.theme-dark .topBar .right .rightBarIcon .icons {
+  cursor: pointer;
+  position: relative;
+}
+.theme-dark .topBar .right .rightBarIcon .badge {
+  height: 15px;
+  width: 15px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.theme-dark .topBar .right .topBarProfilePic {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  cursor: pointer;
+}
+.theme-dark .topBar .right span {
+  color: white;
+}
+@media (max-width: 480px) {
+  .theme-dark .topBar .right span {
+    display: none;
+  }
+}
+.theme-dark .topBar .right .dropdown {
+  position: relative;
+  display: block;
+}
+.theme-dark .topBar .right .dropdown .dropdown-toggle {
+  background-color: transparent;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.theme-dark .topBar .right .dropdown .dropdown-toggle .topBarProfilePic {
+  width: 40px;
+  height: 30px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.theme-dark .topBar .right .dropdown .dropdown-menu {
+  position: absolute;
+  right: 0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  min-width: 150px;
+}
+.theme-dark .topBar .right .dropdown .dropdown-menu .dropdown-item {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.theme-dark .topBar .right .dropdown .dropdown-menu .dropdown-item:hover {
+  background-color: #f4f4f4;
+}
+.theme-dark .topBar dl,
+.theme-dark .topBar ol,
+.theme-dark .topBar ul {
+  position: absolute;
+  top: 50px;
+  margin-bottom: 1rem;
+  list-style-type: none;
+}
+.theme-dark .topBar dl,
+.theme-dark .topBar ol,
+.theme-dark .topBar ul li {
+  background-color: white;
+  width: 600px;
+  text-decoration: none;
+  position: relative;
+  top: -9.5px;
+}
+@media (max-width: 480px) {
+  .theme-dark .topBar dl,
+  .theme-dark .topBar ol,
+  .theme-dark .topBar ul li {
+    width: 200px;
+  }
+}
+.theme-dark .topBar .userProfilePicture {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+}/*# sourceMappingURL=navBar.css.map */

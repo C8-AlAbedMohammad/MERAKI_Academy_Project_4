@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
-    isVerified:{type:Boolean,default:false},
+    isVerified:{type:Boolean,default:true},
     emailToken:{type:String}
   },
   { timestamps: true }
