@@ -148,6 +148,28 @@ setTimeout(() => {
       });
   };
 
+  const handleDeletePost = (id) => {
+    axios
+      .delete(`https://bow-social.onrender.com/post/${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        // setMessage(res.data.message);
+        setTimeout(() => {
+          setGetPost(
+            getPost.filter((post) => {
+              return post._id !== id;
+            })
+          );
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="profile">
       <NavBar />

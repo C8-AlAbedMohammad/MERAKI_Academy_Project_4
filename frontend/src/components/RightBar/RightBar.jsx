@@ -40,7 +40,7 @@ const RightBar = () => {
       )
       .then((res) => {
         const newReq = friendRec.filter((e, i) => {
-          e._id !== senderId;
+        return  e._id !== senderId;
         });
         setfriendRec(newReq);
         console.log(res);
