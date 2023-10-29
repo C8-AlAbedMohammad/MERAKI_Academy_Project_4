@@ -24,7 +24,7 @@ import Comments from "../comments/Comments";
 import EditProfile from "../editProfile/EditProfile";
 
 const Profile = () => {
-  const { token, currntUser, setCurrntUser, userInfo, setUserInfo } =
+  const { token, currntUser, setCurrntUser, userInfo, setUserInfo,getPost,setGetPost } =
     useContext(LoginContext);
   const [commentOpen, setCommentOpen] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
